@@ -1,0 +1,35 @@
+{
+	"description": "Calculator for Crypto Currencies",
+	"license": "",
+	"readme": "CryptoCoin Calculator",
+	"repository": "<fill-your-repository-here>",
+	"nativescript": {
+		"id": "com.dansoft.CoinCalculator",
+		"tns-ios": {
+			"version": "3.2.0"
+		}
+	},
+	"dependencies": {
+		"@angular/animations": "~4.4.1",
+		"@angular/common": "~4.4.1",
+		"@angular/compiler": "~4.4.1",
+		"@angular/core": "~4.4.1",
+		"@angular/forms": "~4.4.1",
+		"@angular/http": "~4.4.1",
+		"@angular/platform-browser": "~4.4.1",
+		"@angular/router": "~4.4.1",
+		"nativescript-angular": "~4.4.0",
+		"nativescript-iqkeyboardmanager": "^1.1.0",
+		"nativescript-pulltorefresh": "^2.0.3",
+		"nativescript-secure-storage": "^2.2.1",
+		"nativescript-theme-core": "~1.0.2",
+		"reflect-metadata": "~0.1.8",
+		"rxjs": "~5.4.2",
+		"tns-core-modules": "~3.2.0",
+		"zone.js": "~0.8.2"
+	},
+	"devDependencies": {
+		"nativescript-dev-typescript": "~0.5.0",
+		"typescript": "~2.4.2"
+	}
+}
