@@ -16,9 +16,9 @@ export class ItemService {
         });
     }
 
-    loadDataFromBitfinex(from: string, to: string): Promise<CurrencyPrice> {
+    /*loadDataFromBitfinex(from: string, to: string): Promise<CurrencyPrice> {
         return this.loadDataFromBitfinexWithSymbol(new CurrencyPrice(from, to, "bitstamp"));
-    }
+    }*/
 
     loadDataFromBitstampWithSymbol(currencyPrice: CurrencyPrice): Promise<CurrencyPrice> {
         return new Promise((resolve, reject) => {
@@ -29,9 +29,9 @@ export class ItemService {
         });
     }
 
-    loadDataFromBitstamp(from: string, to: string): Promise<CurrencyPrice> {
+    /*loadDataFromBitstamp(from: string, to: string): Promise<CurrencyPrice> {
         return this.loadDataFromBitstampWithSymbol(new CurrencyPrice(from,to, "bitfinex"));
-    }
+    }*/
 
     loadIotaBTCData(): Promise<string> {
         return new Promise((resolve, reject) => {

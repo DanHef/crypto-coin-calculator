@@ -31,7 +31,6 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                 <ScrollView>
                     <StackLayout class="page">
                         <StackLayout class="page form p-15">
-                            <Button class="btn btn-primary" text="Refresh" (tap)="onRefreshPressed()"></Button>
                             <Label class="label font-weight-bold m-b-5" text="Anzahl IOTA für BTC"></Label>
                             <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBTCIOTA"></TextField>
 
@@ -58,87 +57,73 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
 
 
     <ng-template tabItem title="Calculation Bitstamp">
-        <ScrollView>
-            <StackLayout class="page form p-15">
-                <Button class="btn btn-primary" text="Refresh" (tap)="onRefreshPressed()"></Button>
-                <Label class="label font-weight-bold m-b-5" text="Anzahl Litecoin für EUR"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampLTCAmountEUR"></TextField>
+        <StackLayout>
+            <PullToRefresh (refresh)="onRefreshPressed($event)">
+                <ScrollView>
+                    <StackLayout class="page form p-15">
+                        <Label class="label font-weight-bold m-b-5" text="Anzahl Litecoin für EUR"></Label>
+                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampLTCAmountEUR"></TextField>
 
-                <Label class="label font-weight-bold m-b-5" text="Anzahl BTC für EUR"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampBTCAmountEuro"></TextField>
+                        <Label class="label font-weight-bold m-b-5" text="Anzahl BTC für EUR"></Label>
+                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampBTCAmountEuro"></TextField>
 
-                <Label class="label font-weight-bold m-b-5" text="Anzahl Ripple für EUR"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampXRPAmountEuro"></TextField>
+                        <Label class="label font-weight-bold m-b-5" text="Anzahl Ripple für EUR"></Label>
+                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampXRPAmountEuro"></TextField>
 
-                <Label class="label font-weight-bold m-b-5" text="Euro Wert Insgesamt"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampAllEuro"></TextField>
+                        <Label class="label font-weight-bold m-b-5" text="Euro Wert Insgesamt"></Label>
+                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampAllEuro"></TextField>
 
-                <Label class="label font-weight-bold m-b-5" text="Euro Wert Litecoin"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampLTCEUR"></TextField>
+                        <Label class="label font-weight-bold m-b-5" text="Euro Wert Litecoin"></Label>
+                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampLTCEUR"></TextField>
 
-                <Label class="label font-weight-bold m-b-5" text="Euro Wert Bitcoins"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampBTCEUR"></TextField>
+                        <Label class="label font-weight-bold m-b-5" text="Euro Wert Bitcoins"></Label>
+                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampBTCEUR"></TextField>
 
 
-                <Label class="label font-weight-bold m-b-5" text="Euro Wert Ripples"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampXRPEUR"></TextField>
-            </StackLayout>
-        </ScrollView>
+                        <Label class="label font-weight-bold m-b-5" text="Euro Wert Ripples"></Label>
+                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampXRPEUR"></TextField>
+                    </StackLayout>
+                </ScrollView>
+            </PullToRefresh>
+        </StackLayout>
     </ng-template>
 
 
     <ng-template tabItem title="Bestand">
-        <ScrollView>
-            <StackLayout class="page form p-15">
-                <Label class="label font-weight-bold m-b-10" text="Bitfinex"></Label>
-                <Label class="label font-weight-bold m-b-5" text="Anzahl IOTA"></Label>
-                <TextField class="input input-rounded m-b-10" (ngModelChange)="onIOTAAmountChange($event)" [ngModel]="IOTAAmount"></TextField>
-
-                <Label class="label font-weight-bold m-b-5" text="Anzahl BTC"></Label>
-                <TextField class="input input-rounded m-b-10" (ngModelChange)="onBTCAmountChange($event)" [ngModel]="BTCAmount"></TextField>
-
-                <Label class="label font-weight-bold m-b-5" text="Anzahl Dash"></Label>
-                <TextField class="input input-rounded m-b-10" (ngModelChange)="onDashAmountChange($event)" [ngModel]="DashAmount"></TextField>
-
-
-                <Label class="label font-weight-bold m-b-10" text="Bitstamp"></Label>
-                <Label class="label font-weight-bold m-b-5" text="Euro"></Label>
-                <TextField class="input input-rounded m-b-10" (ngModelChange)="onBitstampEuroAmountChange($event)" [ngModel]="BitstampEuroAmount"></TextField>
-
-                <Label class="label font-weight-bold m-b-5" text="Anzahl Litecoin"></Label>
-                <TextField class="input input-rounded m-b-10" (ngModelChange)="onBitstampLitecoinAmountChange($event)" [ngModel]="BitstampLitecoinAmount"></TextField>
-
-                <Label class="label font-weight-bold m-b-5" text="Anzahl Bitcoin"></Label>
-                <TextField class="input input-rounded m-b-10" (ngModelChange)="onBitstampBitcoinAmountChange($event)" [ngModel]="BitstampBitcoinAmount"></TextField>
-
-                <Label class="label font-weight-bold m-b-5" text="Anzahl Ripples"></Label>
-                <TextField class="input input-rounded m-b-10" (ngModelChange)="onBitstampRipplesAmountChange($event)" [ngModel]="BitstampRipplesAmount"></TextField>
-            </StackLayout>
-        </ScrollView>
+        <StackLayout>
+            <PullToRefresh (refresh)="onRefreshPressed($event)">
+                <ScrollView>
+                    <StackLayout class="page form p-15">
+                        <StackLayout *ngFor="let portfolioItem of coinPortfolio">
+                            <Label class="label font-weight-bold m-b-5" [text]="portfolioItem.portfolioItemDescription"></Label>
+                            <TextField class="input input-rounded m-b-10" (ngModelChange)="onPortfolioItemQuantityChange($event, portfolioItem)" [ngModel]="portfolioItem.quantity"></TextField>
+                        </StackLayout>
+                    </StackLayout>
+                </ScrollView>
+            </PullToRefresh>
+        </StackLayout>
     </ng-template>
 
 
-    <ng-template tabItem title="Course Information">
-        <ScrollView>
-            <StackLayout class="page form p-15">
-                <Button class="btn btn-primary" text="Refresh" (tap)="onRefreshPressed()"></Button>
-                <Label class="label font-weight-bold m-b-10" text="Bitfinex"></Label>
-                <Label class="label font-weight-bold m-b-5" text="IOTA/BTC Kurs"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="IOTABTCKurs"></TextField>
+    <ng-template tabItem title="Price Information">
+        <StackLayout>
+            <PullToRefresh (refresh)="onRefreshPressed($event)">
+                <ScrollView>
+                    <StackLayout class="page form p-15">
+                        <Label class="label font-weight-bold m-b-10" text="Bitstamp"></Label>
+                        <StackLayout *ngFor="let price of currencyPricesBitstamp">
+                            <Label class="label font-weight-bold m-b-5" [text]="price.currencyPriceDescription"></Label>
+                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="price.price"></TextField>
+                        </StackLayout>
 
-                <Label class="label font-weight-bold m-b-5" text="BTC/EUR Kurs"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="BTCEURKurs"></TextField>
-
-                <Label class="label font-weight-bold m-b-10" text="Bitstamp"></Label>
-                <Label class="label font-weight-bold m-b-5" text="BTC/EUR Kurs"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="BitstampBTCEURKurs"></TextField>
-
-                <Label class="label font-weight-bold m-b-5" text="LTC/EUR Kurs"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="BitstampLTCEURKurs"></TextField>
-
-                <Label class="label font-weight-bold m-b-5" text="XRP/EUR Kurs"></Label>
-                <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="BitstampXRPEURKurs"></TextField>
-            </StackLayout>
-        </ScrollView>
+                        <Label class="label font-weight-bold m-b-10" text="Bitfinex"></Label>
+                        <StackLayout *ngFor="let priceBitfinex of currencyPricesBitfinex">
+                            <Label class="label font-weight-bold m-b-5" [text]="priceBitfinex.currencyPriceDescription"></Label>
+                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="priceBitfinex.price"></TextField>
+                        </StackLayout>
+                    </StackLayout>
+                </ScrollView>
+            </PullToRefresh>
+        </StackLayout>
     </ng-template>
 </TabView>
