@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-
+import * as Admob from "nativescript-admob";
 
 import { registerElement } from "nativescript-angular/element-registry";
 registerElement("PullToRefresh", () => require("nativescript-pulltorefresh").PullToRefresh);
@@ -9,4 +9,6 @@ registerElement("PullToRefresh", () => require("nativescript-pulltorefresh").Pul
     templateUrl: "app.component.html",
 })
 
-export class AppComponent { }
+export class AppComponent {
+    
+ }

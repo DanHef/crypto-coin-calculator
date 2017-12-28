@@ -5,6 +5,8 @@ import { CurrencyPrice } from './CurrencyPrice';
 import { CoinPortfolioItem } from './CoinPortfolioItem';
 import { ItemService } from "./item.service";
 
+import * as Admob from "nativescript-admob";
+
 
 @Component({
     selector: "ns-items",
@@ -44,22 +46,50 @@ export class ItemsComponent implements OnInit {
     CalcBitstampXRPEUR: string;
     CalcBitstampAllEuro: string;
 
-    IOTAAmount: string;
-    BTCAmount: string;
-    DashAmount: string;
-    BitstampEuroAmount: string;
-    BitstampLitecoinAmount: string;
-    BitstampBitcoinAmount: string;
-    BitstampRipplesAmount: string;
-
     coinPortfolio: Array<CoinPortfolioItem> = [];
 
 
     secureStorage = new SecureStorage();
 
+    //private androidBannerId: string = "ca-app-pub-XXXX/YYYY";
+    //private androidInterstitialId: string = "ca-app-pub-KKKK/LLLL";
+    private iosBannerId: string = "ca-app-pub-3704439085032082/3863903252";
+    private iosInterstitialId: string = "ca-app-pub-3704439085032082/6212479394";
+
+    public createBanner() {
+        Admob.createBanner({
+            testing: true,
+            size: Admob.AD_SIZE.SMART_BANNER,
+            iosBannerId: this.iosBannerId,
+            //androidBannerId: this.androidBannerId,
+            iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB"],
+            margins: {
+                bottom: 0
+            }
+        }).then(function() {
+            console.log("admob createBanner done");
+        }, function(error) {
+            console.log("admob createBanner error: " + error);
+        });
+    }
+
+    public createInterstitial() {
+        Admob.createInterstitial({
+            testing: true,
+            iosInterstitialId: this.iosInterstitialId,
+            //androidInterstitialId: this.androidInterstitialId,
+            iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB"]
+        }).then(function() {
+            console.log("admob createInterstitial done");
+        }, function(error) {
+            console.log("admob createInterstitial error: " + error);
+        });
+    }
+
     constructor(private itemService: ItemService) { }
 
     ngOnInit(): void {
+        this.createBanner();
         this.initializePortfolio();
         this.readSecureStorage();
         this.refreshBitfinexData();
