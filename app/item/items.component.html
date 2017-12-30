@@ -10,7 +10,9 @@ So you can still use template expressions, bindings, templates as well as all th
 The ActionBar is the NativeScript common abstraction over the Android ActionBar and iOS NavigationBar.
 http://docs.nativescript.org/ui/action-bar
 -->
-<ActionBar title="Coin Calculator" class="action-bar">
+
+<ActionBar style="margin-top: 50px;" title="Coin Calculator" class="action-bar">
+    <ActionItem ios.position="right" ios.systemIcon="4" (tap)="createPressed()"></ActionItem>
 </ActionBar>
 
 <!--
@@ -23,8 +25,8 @@ These components make use of several CSS class names that are part of the Native
 core theme, such as p-20, btn, h2, and list-group. You can view a full list of the
 class names available for styling your app at https://docs.nativescript.org/ui/theme.
 -->
-
-<TabView class="tab-view" selectedIndex="0" selectedColor="#FF0000">
+<!-- 100px für iPhone X; 50px für den Rest -->
+<TabView [style.margin-bottom]="tabBarMargin" class="tab-view" selectedIndex="0" selectedColor="#FF0000">
     <ng-template tabItem title="Calculation">
         <StackLayout>
             <PullToRefresh (refresh)="onRefreshPressed($event)">

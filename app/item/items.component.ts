@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { SecureStorage } from "nativescript-secure-storage";
 
 import { CurrencyPrice } from './CurrencyPrice';
@@ -6,6 +6,10 @@ import { CoinPortfolioItem } from './CoinPortfolioItem';
 import { ItemService } from "./item.service";
 
 import * as Admob from "nativescript-admob";
+import * as timer from "timer";
+import * as platformModule from "tns-core-modules/platform";
+
+//import * as configSettings from "../config.json";
 
 
 @Component({
@@ -13,18 +17,12 @@ import * as Admob from "nativescript-admob";
     moduleId: module.id,
     templateUrl: "./items.component.html",
 })
-export class ItemsComponent implements OnInit {
-    currencyPricesBitstamp: CurrencyPrice[] = [new CurrencyPrice("ltc", "eur", "bitstamp", "LTC/EUR"),
-                                                new CurrencyPrice("btc", "eur", "bitstamp", "BTC/EUR"),
-                                                new CurrencyPrice("xrp", "eur", "bitstamp", "XRP/EUR")];
+export class ItemsComponent implements OnInit, AfterViewInit {
+    @ViewChild('adView') adView;
 
-    currencyPricesBitfinex: CurrencyPrice[] = [new CurrencyPrice("iot", "btc", "bitfinex", "IOTA/BTC"),
-                                                new CurrencyPrice("btc", "eur", "bitfinex", "BTC/EUR"),
-                                                new CurrencyPrice("eth", "usd", "bitfinex", "ETH/USD"),
-                                                new CurrencyPrice("iot", "eth", "bitfinex", "IOTA/ETH"),
-                                                new CurrencyPrice("btc", "usd", "bitfinex", "BTC/USD"),
-                                                new CurrencyPrice("dsh", "usd", "bitfinex", "DSH/USD"),
-                                                new CurrencyPrice("dsh", "btc", "bitfinex", "DSH/BTC")];
+    currencyPricesBitstamp: CurrencyPrice[] = [];
+
+    currencyPricesBitfinex: CurrencyPrice[] = [];
 
     CalcIOTAEuro: string;
     CalcIOTAUSDViaETH: string;
@@ -55,48 +53,62 @@ export class ItemsComponent implements OnInit {
     //private androidInterstitialId: string = "ca-app-pub-KKKK/LLLL";
     private iosBannerId: string = "ca-app-pub-3704439085032082/3863903252";
     private iosInterstitialId: string = "ca-app-pub-3704439085032082/6212479394";
+    private tabBarMargin: number = 50;
 
     public createBanner() {
-        Admob.createBanner({
-            testing: true,
-            size: Admob.AD_SIZE.SMART_BANNER,
-            iosBannerId: this.iosBannerId,
-            //androidBannerId: this.androidBannerId,
-            iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB"],
-            margins: {
-                bottom: 0
-            }
-        }).then(function() {
-            console.log("admob createBanner done");
-        }, function(error) {
-            console.log("admob createBanner error: " + error);
-        });
+        //different margin for iPhone X because of the bigger screen
+        if (platformModule.screen.mainScreen.heightPixels === 2436 &&
+            platformModule.device.deviceType === "Phone") {
+            this.tabBarMargin = 50;
+        }
+        timer.setTimeout(function () {
+            Admob.createBanner({
+                testing: false,
+                //testing: true,
+                size: Admob.AD_SIZE.SMART_BANNER,
+                iosBannerId: this.iosBannerId,
+                //androidBannerId: this.androidBannerId,
+                iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB", "dee881b78c67c6420ac3cb41add46a94"],
+                margins: {
+                    bottom: 0
+                }
+            }).then(function () {
+                console.log("admob createBanner done");
+            }, function (error) {
+                console.log("admob createBanner error: " + error);
+            });
+        }.bind(this), 0);
     }
 
     public createInterstitial() {
-        Admob.createInterstitial({
-            testing: true,
-            iosInterstitialId: this.iosInterstitialId,
-            //androidInterstitialId: this.androidInterstitialId,
-            iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB"]
-        }).then(function() {
-            console.log("admob createInterstitial done");
-        }, function(error) {
-            console.log("admob createInterstitial error: " + error);
-        });
+        timer.setTimeout(function () {
+            Admob.createInterstitial({
+                testing: true,
+                iosInterstitialId: this.iosInterstitialId,
+                //androidInterstitialId: this.androidInterstitialId,
+                iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB", "dee881b78c67c6420ac3cb41add46a94"]
+            }).then(function () {
+                console.log("admob createInterstitial done");
+            }, function (error) {
+                console.log("admob createInterstitial error: " + error);
+            });
+        }.bind(this), 0);
     }
 
     constructor(private itemService: ItemService) { }
 
     ngOnInit(): void {
-        this.createBanner();
-        this.initializePortfolio();
+        //this.initializePortfolio();
+        //this.initializePrices();
         this.readSecureStorage();
         this.refreshBitfinexData();
         this.refreshBitstampData();
     }
 
-    
+    ngAfterViewInit() {
+        //this.createInterstitial();
+        //this.createBanner();
+    }
 
     refreshAll(pullToRefresh) {
         let promiseBitfinex = this.refreshBitfinexData();
@@ -236,7 +248,7 @@ export class ItemsComponent implements OnInit {
     }
 
     calculateIOTAUSDViaBTC() {
-        let result = (this.getCoinPortfolioItem("bitfinexIOTA", "bitfinex").getQuantity()* this.getCourse("iot", "btc", "bitfinex")) * this.getCourse("btc", "usd", "bitfinex");
+        let result = (this.getCoinPortfolioItem("bitfinexIOTA", "bitfinex").getQuantity() * this.getCourse("iot", "btc", "bitfinex")) * this.getCourse("btc", "usd", "bitfinex");
         this.CalcIOTAUSDViaBTC = result.toString();
     }
 
@@ -299,10 +311,15 @@ export class ItemsComponent implements OnInit {
 
 
     readSecureStorage() {
-        /*var success = this.secureStorage.removeSync({
+        var success = this.secureStorage.removeSync({
             key: "cryptoCoinCalcPortfolio"
-        });*/
+        });
 
+        var success = this.secureStorage.removeSync({
+            key: "cryptoCoinCalcPriceInformationData"
+        });
+
+        //read portfolio items
         let storedPortfolioString = this.secureStorage.getSync({
             key: "cryptoCoinCalcPortfolio",
         });
@@ -312,11 +329,41 @@ export class ItemsComponent implements OnInit {
             for (var i = 0; i < storedPortfolio.length; i++) {
                 let storedPortfolioItem = storedPortfolio[i];
                 let portfolioItem = this.getCoinPortfolioItem(storedPortfolioItem.portfolioItemName,
-                    storedPortfolioItem.portfolio);
+                    storedPortfolioItem.portfolioName);
 
-                portfolioItem.setQuantity(storedPortfolioItem.quantity);
+                if (portfolioItem) {
+                    portfolioItem.setQuantity(storedPortfolioItem.quantity);
+                } else {
+                    console.log("PortfolioItem " + storedPortfolioItem.portfolioItemName + " not created");
+                }
             }
         }
+
+        //read price information data
+        let storedPriceInformationString = this.secureStorage.getSync({
+            key: "cryptoCoinCalcPriceInformationData",
+        });
+
+        if (storedPriceInformationString) {
+            let storedPriceInformations = JSON.parse(storedPriceInformationString);
+
+            for (var i = 0; i < storedPriceInformations.length; i++) {
+                let storedPriceInformation = storedPriceInformations[i];
+
+                this.createPriceInformation(storedPriceInformation.currencyCodeFrom,
+                    storedPriceInformation.currencyCodeTo,
+                    storedPriceInformation.description,
+                    storedPriceInformation.platform);
+
+            }
+        }
+
+        //read calculation bitstamp
+        /*let storedCalculationFieldsString = this.secureStorage.getSync({
+            key: "cryptoCoinCalcCalculationFields",
+        });*/
+
+        //read caluclation bitfinex
     }
 
 
@@ -368,5 +415,44 @@ export class ItemsComponent implements OnInit {
         this.createPortfolioItem("bitfinexDash",
             "Bitfinex - Dash",
             "bitfinex");
+    }
+
+
+    initializePrices() {
+        this.createPriceInformation("ltc", "eur", "bitstamp", "LTC/EUR");
+        this.createPriceInformation("btc", "eur", "bitstamp", "BTC/EUR");
+        this.createPriceInformation("xrp", "eur", "bitstamp", "XRP/EUR");
+
+        this.createPriceInformation("iot", "btc", "bitfinex", "IOTA/BTC");
+        this.createPriceInformation("btc", "eur", "bitfinex", "BTC/EUR");
+        this.createPriceInformation("eth", "usd", "bitfinex", "ETH/USD");
+        this.createPriceInformation("iot", "eth", "bitfinex", "IOTA/ETH");
+        this.createPriceInformation("btc", "usd", "bitfinex", "BTC/USD");
+        this.createPriceInformation("dsh", "usd", "bitfinex", "DSH/USD");
+        this.createPriceInformation("dsh", "btc", "bitfinex", "DSH/BTC");
+
+        this.savePriceInformation();
+    }
+
+    addNewPriceInformation() {
+
+    }
+
+
+    createPriceInformation(from: string, to: string, description: string, platform: string): CurrencyPrice {
+        let newCurrencyPrice = new CurrencyPrice(from, to, platform, description);
+
+        this.currencyPricesBitstamp.push(newCurrencyPrice);
+
+        return newCurrencyPrice;
+    }
+
+    savePriceInformation() {
+        let priceInformationDataStorage = this.currencyPricesBitstamp.concat(this.currencyPricesBitfinex);
+
+        this.secureStorage.setSync({
+            key: "cryptoCoinCalcPriceInformationData",
+            value: JSON.stringify(priceInformationDataStorage)
+        });
     }
 }
