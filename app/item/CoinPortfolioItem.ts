@@ -1,11 +1,20 @@
 export class CoinPortfolioItem {
-    private portfolioName: string;
+    private platform: string;
     private portfolioItemName: string;
     private portfolioItemDescription: string;
     private quantity: number;
+    private symbol: string;
 
-    constructor() {
-        this.quantity = 0;
+    constructor(platform, portfolioItemName, portfolioItemDescription, symbol, quantity?) {
+        this.platform = platform;
+        this.portfolioItemName = portfolioItemName;
+        this.portfolioItemDescription = portfolioItemDescription;
+        this.symbol = symbol;
+        if(quantity) {
+            this.quantity = quantity;
+        } else {
+            this.quantity = 0;
+        }
     }
 
     getQuantity() {
@@ -18,11 +27,11 @@ export class CoinPortfolioItem {
 
 
     getPortfolioName() {
-        return this.portfolioName;
+        return this.platform;
     }
 
     setPortfolioName(portfolioName: string) {
-        this.portfolioName = portfolioName;
+        this.platform = portfolioName;
     }
 
     getPortfolioItemName() {
@@ -39,5 +48,13 @@ export class CoinPortfolioItem {
 
     setPortfolioItemDescription(portfolioItemDescription: string) {
         this.portfolioItemDescription = portfolioItemDescription;
+    }
+
+    setSymbol(symbol:string) {
+        this.symbol = symbol;
+    }
+
+    getSymbol():string {
+        return this.symbol;
     }
 }

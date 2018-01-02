@@ -4,8 +4,12 @@ import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
 
 import { ItemService } from "./item/item.service";
+import { PortfolioItemService } from "./item/services/portfolio-item.service";
 import { ItemsComponent } from "./item/items.component";
 import { ItemDetailComponent } from "./item/item-detail.component";
+import { CreatePortfolioItemComponent } from "./item/create-portfolio-item/create-portfolio-item.component";
+import { CreateCurrencyPriceComponent } from "./item/create-currency-price/create-currency-price.component";
+import { CurrencyPriceService } from "./item/services/currency-price.service";
 
 import * as elementRegistryModule from 'nativescript-angular/element-registry';
 import * as Admob from "nativescript-admob";
@@ -17,7 +21,6 @@ import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
 // Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
 import { NativeScriptHttpModule } from "nativescript-angular/http";
-
 
 
 
@@ -34,13 +37,19 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
     declarations: [
         AppComponent,
         ItemsComponent,
-        ItemDetailComponent
+        ItemDetailComponent,
+        CreatePortfolioItemComponent,
+        CreateCurrencyPriceComponent
     ],
     providers: [
+        ItemService,
+        PortfolioItemService,
+        CurrencyPriceService
     ],
     schemas: [
         NO_ERRORS_SCHEMA
-    ]
+    ],
+    entryComponents: []
 })
 /*
 Pass your application module to the bootstrapModule function located in main.ts to start your app

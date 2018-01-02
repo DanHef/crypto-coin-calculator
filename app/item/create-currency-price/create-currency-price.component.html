@@ -1,0 +1,15 @@
+<StackLayout>
+        <Label text="Currency Code From:"></Label>
+        <TextField [(ngModel)]="codeFrom"></TextField>
+    
+        <Label text="Currency Code To:"></Label>
+        <TextField [(ngModel)]="codeTo"></TextField>
+    
+        <Label text="Platform:"></Label>
+        <TextField [(ngModel)]="platform"></TextField>
+    
+        <Label text="Description:"></Label>
+        <TextField [(ngModel)]="description"></TextField>
+    
+        <Button (tap)="createCurrencyPrice()" text="Create"></Button>
+    </StackLayout>
