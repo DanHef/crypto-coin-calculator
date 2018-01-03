@@ -96,6 +96,7 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
             <PullToRefresh (refresh)="onRefreshTriggered($event)">
                 <ScrollView>
                     <StackLayout class="page form p-15">
+                        <Label text="No Data Available" *ngIf="coinPortfolio.length == 0"></Label>
                         <StackLayout *ngFor="let portfolioItem of coinPortfolio">
                             <Label class="label font-weight-bold m-b-5" [text]="portfolioItem.portfolioItemDescription"></Label>
                             <TextField class="input input-rounded m-b-10" (ngModelChange)="onPortfolioItemQuantityChange($event, portfolioItem)" [ngModel]="portfolioItem.quantity"></TextField>
@@ -117,12 +118,14 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                             <Label class="label font-weight-bold m-b-5" [text]="price.currencyPriceDescription"></Label>
                             <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="price.price"></TextField>
                         </StackLayout>
+                        <Label *ngIf="currencyPricesBitstamp.length == 0" text="No Data for Bitstamp"></Label>
 
                         <Label class="label font-weight-bold m-b-10" text="Bitfinex"></Label>
                         <StackLayout *ngFor="let priceBitfinex of currencyPricesBitfinex">
                             <Label class="label font-weight-bold m-b-5" [text]="priceBitfinex.currencyPriceDescription"></Label>
                             <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="priceBitfinex.price"></TextField>
                         </StackLayout>
+                        <Label *ngIf="currencyPricesBitfinex.length == 0" text="No Data for Bitfinex"></Label>
                     </StackLayout>
                 </ScrollView>
             </PullToRefresh>

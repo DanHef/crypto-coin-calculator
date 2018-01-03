@@ -6,10 +6,10 @@ export class CoinPortfolioItem {
     private symbol: string;
 
     constructor(platform, portfolioItemName, portfolioItemDescription, symbol, quantity?) {
-        this.platform = platform;
-        this.portfolioItemName = portfolioItemName;
+        this.platform = platform.toLowerCase();
+        this.portfolioItemName = portfolioItemName.toLowerCase();
         this.portfolioItemDescription = portfolioItemDescription;
-        this.symbol = symbol;
+        this.symbol = symbol.toLowerCase();
         if(quantity) {
             this.quantity = quantity;
         } else {
@@ -30,8 +30,8 @@ export class CoinPortfolioItem {
         return this.platform;
     }
 
-    setPortfolioName(portfolioName: string) {
-        this.platform = portfolioName;
+    setPortfolioName(platform: string) {
+        this.platform = platform.toLowerCase();
     }
 
     getPortfolioItemName() {
@@ -39,7 +39,7 @@ export class CoinPortfolioItem {
     }
 
     setPortfolioItemName(portfolioItemName: string) {
-        this.portfolioItemName = portfolioItemName;
+        this.portfolioItemName = portfolioItemName.toLowerCase();
     }
 
     getPortfolioItemDescription() {
@@ -51,7 +51,7 @@ export class CoinPortfolioItem {
     }
 
     setSymbol(symbol:string) {
-        this.symbol = symbol;
+        this.symbol = symbol.toLowerCase();
     }
 
     getSymbol():string {

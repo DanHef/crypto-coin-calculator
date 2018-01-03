@@ -6,9 +6,9 @@ export class CurrencyPrice {
     price: number;
 
     constructor(codeFrom, codeTo, platform, description) {
-        this.currencyCodeFrom = codeFrom;
-        this.currencyCodeTo = codeTo;
-        this.platform = platform;
+        this.currencyCodeFrom = codeFrom.toLowerCase();
+        this.currencyCodeTo = codeTo.toLowerCase();
+        this.platform = platform.toLowerCase();
         this.currencyPriceDescription = description;
      };
 
