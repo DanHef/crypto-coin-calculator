@@ -13,6 +13,7 @@ import * as timer from "timer";
 import * as platformModule from "tns-core-modules/platform";
 
 import { Router, ActivatedRoute } from "@angular/router";
+import { PageRoute } from "nativescript-angular/router";
 import { BrowserPlatformLocation } from "@angular/platform-browser/src/browser/location/browser_platform_location";
 
 //import * as configSettings from "../config.json";
@@ -70,17 +71,20 @@ export class ItemsComponent implements OnInit, AfterViewInit {
                 private readonly portfolioItemService: PortfolioItemService,
                 private readonly router: Router,
                 private readonly currencyPriceService: CurrencyPriceService,
-                private readonly calculationService: CalculationService) {
+                private readonly calculationService: CalculationService,
+                private readonly pageRoute: PageRoute) {
     }
     
     ngOnInit(): void {
         //initialize buffers
         this.portfolioItemService.loadPortfolio();
         this.currencyPriceService.loadCurrencyPrices();
+        this.calculationService.loadCurrencyPrices();
 
         this.refreshPortfolio();
         //this method only refreshes the currency price data from the local storage => to have the actual prices refresh on the data has to be performed
         this.refreshMaintainedCurrencyPrices();
+        this.refreshMaintainedCalculationResults();
 
         //read data from the respective platforms
         let promiseBitfinex = this.refreshBitfinexData();
@@ -88,7 +92,28 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
         Promise.all([promiseBitfinex, promiseBitstamp]).then(() => {
             this.calculateResults();
+            this.refreshMaintainedCalculationResults();
         });
+
+        this.currencyPriceService.currencyPricesChanged.subscribe(function() {
+            this.refreshMaintainedCurrencyPrices();
+        }.bind(this));
+
+        /*this.pageRoute.activatedRoute.forEach(function() {
+            this.refreshPortfolio();
+            //this method only refreshes the currency price data from the local storage => to have the actual prices refresh on the data has to be performed
+            this.refreshMaintainedCurrencyPrices();
+            this.refreshMaintainedCalculationResults();
+    
+            //read data from the respective platforms
+            let promiseBitfinex = this.refreshBitfinexData();
+            let promiseBitstamp = this.refreshBitstampData();
+    
+            Promise.all([promiseBitfinex, promiseBitstamp]).then(() => {
+                this.calculateResults();
+                this.refreshMaintainedCalculationResults();
+            });
+        }.bind(this));*/
     }
 
     ngAfterViewInit() {

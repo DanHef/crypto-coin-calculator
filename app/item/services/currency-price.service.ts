@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 
 import { CurrencyPrice } from "../CurrencyPrice";
 import { SecureStorage } from "nativescript-secure-storage";
@@ -7,7 +7,7 @@ import { SecureStorage } from "nativescript-secure-storage";
 export class CurrencyPriceService {
     currencyPrices: Array<CurrencyPrice> = [];
     secureStorage: SecureStorage = new SecureStorage();
-
+    public currencyPricesChanged = new EventEmitter<Object>();
 
     addCurrencyPrice(currencyPrice) {
         this.currencyPrices.push(currencyPrice);
@@ -18,6 +18,12 @@ export class CurrencyPriceService {
         let newCurrencyPrice = new CurrencyPrice(codeFrom, codeTo, platform, description);
 
         this.currencyPrices.push(newCurrencyPrice);
+
+        this.currencyPricesChanged.emit({
+            data: null, 
+            message: null, 
+            notification: null
+        });
 
         return newCurrencyPrice;
     }
@@ -73,8 +79,6 @@ export class CurrencyPriceService {
     }
 
     loadCurrencyPrices() {
-        this.secureStorage.removeSync({key: "cryptoCoinCalcPriceInformationData"});
-
         let storedPriceInformationString = this.secureStorage.getSync({
             key: "cryptoCoinCalcPriceInformationData",
         });
@@ -87,7 +91,7 @@ export class CurrencyPriceService {
 
                 this.createCurrencyPrice(storedPriceInformation.currencyCodeFrom,
                     storedPriceInformation.currencyCodeTo,
-                    storedPriceInformation.description,
+                    storedPriceInformation.currencyPriceDescription,
                     storedPriceInformation.platform);
 
             }

@@ -25,7 +25,7 @@ export class CalculationService {
         let portfolioItem = this.portfolioItemService.getPortfolioItemByTechnicalName(sourcePortfolioItemName, platform);
         let currencyPrice = this.currencyPriceService.getCurrencyPrice(portfolioItem.getSymbol(), targetCurrencySymbol, platform);
         
-        let newCalculationResult = new CalculationResult(description, portfolioItem, currencyPrice, platform);
+        let newCalculationResult = new CalculationResult(description, portfolioItem, currencyPrice, platform, targetCurrencySymbol);
 
         this.calculationResults.push(newCalculationResult);
 
@@ -67,8 +67,8 @@ export class CalculationService {
             for (var i = 0; i < storedCalculationResults.length; i++) {
                 let storedCalculationResult = storedCalculationResults[i];
 
-                this.createCalculationResult(storedCalculationResult.currencyCodeFrom,
-                    storedCalculationResult.currencyCodeTo,
+                this.createCalculationResult(storedCalculationResult.sourcePortfolioItem.portfolioItemName,
+                    storedCalculationResult.targetCurrency,
                     storedCalculationResult.description,
                     storedCalculationResult.platform);
 

@@ -53,7 +53,7 @@ export class PortfolioItemService {
 
 
     loadPortfolio() {
-        this.secureStorage.removeSync({key: "cryptoCoinCalcPortfolio"});
+        //this.secureStorage.removeSync({key: "cryptoCoinCalcPortfolio"});
 
         let storedPortfolioString = this.secureStorage.getSync({
             key: "cryptoCoinCalcPortfolio",
@@ -63,12 +63,13 @@ export class PortfolioItemService {
             let storedPortfolio = JSON.parse(storedPortfolioString);
             for (var i = 0; i < storedPortfolio.length; i++) {
                 let storedPortfolioItem = storedPortfolio[i];
-                let portfolioItem = this.getPortfolioItemByTechnicalName(storedPortfolioItem.portfolioItemName,
-                    storedPortfolioItem.portfolioName);
+                let portfolioItem = this.createPortfolioItem(storedPortfolioItem.portfolioItemName,
+                                                                storedPortfolioItem.portfolioItemDescription,
+                                                                storedPortfolioItem.quantity,
+                                                                storedPortfolioItem.platform, 
+                                                                storedPortfolioItem.symbol);
 
-                if (portfolioItem) {
-                    portfolioItem.setQuantity(storedPortfolioItem.quantity);
-                } else {
+                if (!portfolioItem) {
                     console.log("PortfolioItem " + storedPortfolioItem.portfolioItemName + " not created");
                 }
             }

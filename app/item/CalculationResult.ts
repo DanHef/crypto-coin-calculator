@@ -7,10 +7,13 @@ export class CalculationResult {
     private result: number;
     private sourcePortfolioItem: CoinPortfolioItem;
     private targetCurrencyPrice: CurrencyPrice;
+    private targetCurrency: string;
 
-    constructor(description: string, sourcePortfolioItem: CoinPortfolioItem, targetCurrency: CurrencyPrice, platform:string) {
+    constructor(description: string, sourcePortfolioItem: CoinPortfolioItem, targetCurrency: CurrencyPrice, platform:string,
+                targetCurrencySymbol: string) {
         this.sourcePortfolioItem = sourcePortfolioItem;
         this.targetCurrencyPrice = targetCurrency;
+        this.targetCurrency = targetCurrencySymbol;
         this.platform = platform.toLowerCase();
         this.description = description;
      };
