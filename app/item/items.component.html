@@ -12,7 +12,7 @@ http://docs.nativescript.org/ui/action-bar
 -->
 
 <ActionBar style="margin-top: 50px;" title="Coin Calculator" class="action-bar">
-    <ActionItem ios.position="right" ios.systemIcon="4" (tap)="createPressed()"></ActionItem>
+    <ActionItem *ngIf="tabSelectedIndex != 0" ios.position="right" ios.systemIcon="4" (tap)="createPressed()" [visible]="createButtonVisible"></ActionItem>
 </ActionBar>
 
 <!--
@@ -26,7 +26,8 @@ core theme, such as p-20, btn, h2, and list-group. You can view a full list of t
 class names available for styling your app at https://docs.nativescript.org/ui/theme.
 -->
 <!-- 100px für iPhone X; 50px für den Rest -->
-<TabView [style.margin-bottom]="tabBarMargin" class="tab-view" [(ngModel)]="tabSelectedIndex" selectedColor="#FF0000">
+<TabView [style.margin-bottom]="tabBarMargin" class="tab-view" [(ngModel)]="tabSelectedIndex" 
+        selectedColor="#FF0000">
     <ng-template tabItem title="Calculation">
         <StackLayout>
             <PullToRefresh (refresh)="onRefreshTriggered($event)">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ViewContainerRef } from "@angular/core";
+import { Component } from "@angular/core";
 import { CoinPortfolioItem } from "../CoinPortfolioItem";
 
 import { PortfolioItemService } from "../services/portfolio-item.service";
@@ -11,7 +11,7 @@ import { RouterExtensions } from "nativescript-angular/router";
     moduleId: module.id,
     templateUrl: "./create-portfolio-item.component.html",
 })
-export class CreatePortfolioItemComponent  {
+export class CreatePortfolioItemComponent {
     technicalName: string;
     quantity: number;
     description: string;
@@ -19,14 +19,14 @@ export class CreatePortfolioItemComponent  {
     symbol: string;
 
     constructor(private readonly portfolioItemService: PortfolioItemService,
-                private readonly router: Router,
-                private readonly routerExtension: RouterExtensions) { }
+        private readonly router: Router,
+        private readonly routerExtension: RouterExtensions) { }
 
     onCreatePortfolioItem() {
-        this.portfolioItemService.createPortfolioItem(this.technicalName, this.description, 
-                                                        this.quantity, this.portfolio, this.symbol);
+        this.portfolioItemService.createPortfolioItem(this.technicalName, this.description,
+            this.quantity, this.portfolio, this.symbol);
         this.portfolioItemService.savePortfolio();
 
-        this.routerExtension.navigate(["/items"], { clearHistory: true });
+        this.routerExtension.back();
     }
 }

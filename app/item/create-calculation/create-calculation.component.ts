@@ -23,6 +23,6 @@ export class CreateCalculationComponent  {
     createCalculationResult() {
         this.calculationService.createCalculationResult(this.sourcePortfolioItemName.toLowerCase(), this.targetCurrencySymbol.toLowerCase(), this.description, this.platform.toLowerCase());
         
-        this.routerExtension.navigate(["/items"], { clearHistory: true });
+        this.routerExtension.back();
     }
 }

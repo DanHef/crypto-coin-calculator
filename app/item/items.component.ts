@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit} from "@angular/core";
 import { SecureStorage } from "nativescript-secure-storage";
 
 import { CurrencyPrice } from './CurrencyPrice';
@@ -12,7 +12,8 @@ import * as Admob from "nativescript-admob";
 import * as timer from "timer";
 import * as platformModule from "tns-core-modules/platform";
 
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
+import { BrowserPlatformLocation } from "@angular/platform-browser/src/browser/location/browser_platform_location";
 
 //import * as configSettings from "../config.json";
 
@@ -35,6 +36,8 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
     private tabSelectedIndex: number = 0;
     private tabBarMargin: number = 50;
+    private createButtonVisible: boolean = false;
+
     //AdMob for Android to be done
     //private androidBannerId: string = "ca-app-pub-XXXX/YYYY";
     //private androidInterstitialId: string = "ca-app-pub-KKKK/LLLL";
@@ -42,7 +45,7 @@ export class ItemsComponent implements OnInit, AfterViewInit {
     private iosInterstitialId: string = "ca-app-pub-3704439085032082/6212479394";
     
 
-    CalcIOTAEuro: string;
+    /*CalcIOTAEuro: string;
     CalcIOTAUSDViaETH: string;
     CalcIOTAUSDViaBTC: string;
     CalcDashEuroViaBTC: string;
@@ -60,7 +63,7 @@ export class ItemsComponent implements OnInit, AfterViewInit {
     CalcBitstampLTCEUR: string;
     CalcBitstampBTCEUR: string;
     CalcBitstampXRPEUR: string;
-    CalcBitstampAllEuro: string;
+    CalcBitstampAllEuro: string;*/
 
 
     constructor(private readonly itemService: ItemService,
@@ -267,7 +270,7 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
     createPressed() {
         switch(this.tabSelectedIndex) {
-            case 0:
+            case 1:
                 //calculation field should be created
                 this.router.navigate(["/createCalculationResult"]);
                 break;
@@ -276,9 +279,18 @@ export class ItemsComponent implements OnInit, AfterViewInit {
                 this.router.navigate(["/createPortfolioItem"]);
                 break;
             case 3: 
-                //currency price should be created   
+                //currency price should be created
                 this.router.navigate(["/createCurrencyPrice"]); 
                 break;
+        }
+    }
+
+
+    onTabIndexChanged(event) {
+        if(this.tabSelectedIndex === 0) {
+            this.createButtonVisible = false;
+        } else {
+            this.createButtonVisible = true;
         }
     }
 
@@ -328,7 +340,7 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
 
     //calculations
-    calculateAll() {
+    /*calculateAll() {
         this.calculateIOTAEuroViaBTC();
         this.calculateDashEuroViaBTC();
         this.calculateDashUSD();
@@ -428,5 +440,6 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
         result = parseFloat(this.CalcBitstampBTCEUR) + parseFloat(this.CalcBitstampLTCEUR) + parseFloat(this.CalcBitstampXRPEUR);
         this.CalcBitstampAllEuro = result.toString();
-    }
+    }*/
+    
 }
