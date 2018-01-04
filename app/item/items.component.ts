@@ -6,6 +6,7 @@ import { CoinPortfolioItem } from './CoinPortfolioItem';
 import { ItemService } from "./item.service";
 import { PortfolioItemService } from "./services/portfolio-item.service";
 import { CurrencyPriceService } from "./services/currency-price.service";
+import { CalculationService } from "./services/calculation.service";
 
 import * as Admob from "nativescript-admob";
 import * as timer from "timer";
@@ -22,10 +23,24 @@ import { Router } from "@angular/router";
     templateUrl: "./items.component.html",
 })
 export class ItemsComponent implements OnInit, AfterViewInit {
-    currencyPricesBitstamp: CurrencyPrice[] = [];
-    currencyPricesBitfinex: CurrencyPrice[] = [];
+    private coinPortfolio: Array<CoinPortfolioItem> = [];
 
-    tabSelectedIndex: number = 0;
+    private currencyPricesBitstamp: CurrencyPrice[] = [];
+    private currencyPricesBitfinex: CurrencyPrice[] = [];
+
+    private calcResultGeneral = [];
+    private calcResultsPortfolios = [];
+
+    private secureStorage = new SecureStorage();
+
+    private tabSelectedIndex: number = 0;
+    private tabBarMargin: number = 50;
+    //AdMob for Android to be done
+    //private androidBannerId: string = "ca-app-pub-XXXX/YYYY";
+    //private androidInterstitialId: string = "ca-app-pub-KKKK/LLLL";
+    private iosBannerId: string = "ca-app-pub-3704439085032082/3863903252";
+    private iosInterstitialId: string = "ca-app-pub-3704439085032082/6212479394";
+    
 
     CalcIOTAEuro: string;
     CalcIOTAUSDViaETH: string;
@@ -47,64 +62,13 @@ export class ItemsComponent implements OnInit, AfterViewInit {
     CalcBitstampXRPEUR: string;
     CalcBitstampAllEuro: string;
 
-    coinPortfolio: Array<CoinPortfolioItem> = [];
-
-
-    secureStorage = new SecureStorage();
-
-    //private androidBannerId: string = "ca-app-pub-XXXX/YYYY";
-    //private androidInterstitialId: string = "ca-app-pub-KKKK/LLLL";
-    private iosBannerId: string = "ca-app-pub-3704439085032082/3863903252";
-    private iosInterstitialId: string = "ca-app-pub-3704439085032082/6212479394";
-    private tabBarMargin: number = 50;
 
     constructor(private readonly itemService: ItemService,
                 private readonly portfolioItemService: PortfolioItemService,
                 private readonly router: Router,
-                private readonly currencyPriceService: CurrencyPriceService) {
+                private readonly currencyPriceService: CurrencyPriceService,
+                private readonly calculationService: CalculationService) {
     }
-    
-
-    public createBanner() {
-        //different margin for iPhone X because of the bigger screen
-        if (platformModule.screen.mainScreen.heightPixels === 2436 &&
-            platformModule.device.deviceType === "Phone") {
-            this.tabBarMargin = 50;
-        }
-        timer.setTimeout(function () {
-            Admob.createBanner({
-                testing: false,
-                //testing: true,
-                size: Admob.AD_SIZE.SMART_BANNER,
-                iosBannerId: this.iosBannerId,
-                //androidBannerId: this.androidBannerId,
-                iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB", "dee881b78c67c6420ac3cb41add46a94"],
-                margins: {
-                    bottom: 0
-                }
-            }).then(function () {
-                console.log("admob createBanner done");
-            }, function (error) {
-                console.log("admob createBanner error: " + error);
-            });
-        }.bind(this), 0);
-    }
-
-    public createInterstitial() {
-        timer.setTimeout(function () {
-            Admob.createInterstitial({
-                testing: true,
-                iosInterstitialId: this.iosInterstitialId,
-                //androidInterstitialId: this.androidInterstitialId,
-                iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB", "dee881b78c67c6420ac3cb41add46a94"]
-            }).then(function () {
-                console.log("admob createInterstitial done");
-            }, function (error) {
-                console.log("admob createInterstitial error: " + error);
-            });
-        }.bind(this), 0);
-    }
-
     
     ngOnInit(): void {
         //initialize buffers
@@ -112,12 +76,16 @@ export class ItemsComponent implements OnInit, AfterViewInit {
         this.currencyPriceService.loadCurrencyPrices();
 
         this.refreshPortfolio();
-        this.refreshCurrencyPrices();
-        //this.initializePortfolio();
-        //this.initializePrices();
-        //this.readSecureStorage();
-        this.refreshBitfinexData();
-        this.refreshBitstampData();
+        //this method only refreshes the currency price data from the local storage => to have the actual prices refresh on the data has to be performed
+        this.refreshMaintainedCurrencyPrices();
+
+        //read data from the respective platforms
+        let promiseBitfinex = this.refreshBitfinexData();
+        let promiseBitstamp = this.refreshBitstampData();
+
+        Promise.all([promiseBitfinex, promiseBitstamp]).then(() => {
+            this.calculateResults();
+        });
     }
 
     ngAfterViewInit() {
@@ -126,7 +94,7 @@ export class ItemsComponent implements OnInit, AfterViewInit {
     }
 
     //------------------------
-    //data refresh logic
+    // data refresh logic
     //------------------------
     onRefreshTriggered(event) {
         var pullToRefresh = event.object;
@@ -136,12 +104,13 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
     refreshAll(pullToRefresh) {
         this.refreshPortfolio();
-        this.refreshCurrencyPrices();
+        this.refreshMaintainedCurrencyPrices();
 
         let promiseBitfinex = this.refreshBitfinexData();
         let promiseBitstamp = this.refreshBitstampData();
 
         Promise.all([promiseBitfinex, promiseBitstamp]).then(() => {
+            this.calculateResults();
             pullToRefresh.refreshing = false;
         });
     }
@@ -157,7 +126,6 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
         return new Promise<boolean>((resolve, reject) => {
             Promise.all(promises).then(() => {
-                this.calculateAll();
                 resolve(true);
             });
         });
@@ -174,7 +142,6 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
         return new Promise<boolean>((resolve, reject) => {
             Promise.all(promises).then(() => {
-                this.calculateAll();
                 resolve(true);
             });
         });
@@ -185,9 +152,18 @@ export class ItemsComponent implements OnInit, AfterViewInit {
         this.coinPortfolio = this.portfolioItemService.getAllPortfolioItems();
     }
 
-    refreshCurrencyPrices() {
+    refreshMaintainedCurrencyPrices() {
         this.currencyPricesBitfinex = this.currencyPriceService.getAllCurrencyPrices("bitfinex");
         this.currencyPricesBitstamp = this.currencyPriceService.getAllCurrencyPrices("bitstamp");
+    }
+
+    refreshMaintainedCalculationResults() {
+        this.calcResultsPortfolios = this.calculationService.getAllCalculationResults();
+    }
+
+    calculateResults() {
+        this.calculationService.calculateAllResults();
+        this.calcResultsPortfolios = this.calculationService.getAllCalculationResults();
     }
     //----------------------
     //END: data refresh logic
@@ -219,6 +195,7 @@ export class ItemsComponent implements OnInit, AfterViewInit {
         changedPortfolioItem.setQuantity(quantity);
 
         this.portfolioItemService.savePortfolio();
+        this.currencyPriceService.saveCurrencyPrices();
     }
 
 
@@ -290,6 +267,10 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
     createPressed() {
         switch(this.tabSelectedIndex) {
+            case 0:
+                //calculation field should be created
+                this.router.navigate(["/createCalculationResult"]);
+                break;
             case 2: 
                 //portfolio item should be created
                 this.router.navigate(["/createPortfolioItem"]);
@@ -299,6 +280,50 @@ export class ItemsComponent implements OnInit, AfterViewInit {
                 this.router.navigate(["/createCurrencyPrice"]); 
                 break;
         }
+    }
+
+
+    //---------------------
+    // AdMob functions
+    //---------------------
+    public createBanner() {
+        //different margin for iPhone X because of the bigger screen
+        if (platformModule.screen.mainScreen.heightPixels === 2436 &&
+            platformModule.device.deviceType === "Phone") {
+            this.tabBarMargin = 50;
+        }
+        timer.setTimeout(function () {
+            Admob.createBanner({
+                testing: false,
+                //testing: true,
+                size: Admob.AD_SIZE.SMART_BANNER,
+                iosBannerId: this.iosBannerId,
+                //androidBannerId: this.androidBannerId,
+                iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB", "dee881b78c67c6420ac3cb41add46a94"],
+                margins: {
+                    bottom: 0
+                }
+            }).then(function () {
+                console.log("admob createBanner done");
+            }, function (error) {
+                console.log("admob createBanner error: " + error);
+            });
+        }.bind(this), 0);
+    }
+
+    public createInterstitial() {
+        timer.setTimeout(function () {
+            Admob.createInterstitial({
+                testing: true,
+                iosInterstitialId: this.iosInterstitialId,
+                //androidInterstitialId: this.androidInterstitialId,
+                iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB", "dee881b78c67c6420ac3cb41add46a94"]
+            }).then(function () {
+                console.log("admob createInterstitial done");
+            }, function (error) {
+                console.log("admob createInterstitial error: " + error);
+            });
+        }.bind(this), 0);
     }
 
 

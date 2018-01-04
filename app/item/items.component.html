@@ -33,7 +33,11 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                 <ScrollView>
                     <StackLayout class="page">
                         <StackLayout class="page form p-15">
-                            <Label class="label font-weight-bold m-b-5" text="Anzahl IOTA für BTC"></Label>
+                            <StackLayout *ngFor="let calcResultGeneral of calcResultsGeneral">
+                                <Label class="label font-weight-bold m-b-5" [text]="calcResultGeneral.description"></Label>
+                                <TextField isEnabled="false" class="input input-rounded m-b-10" [text]="calcResultGeneral.result"></TextField>
+                            </StackLayout>
+                            <!--<Label class="label font-weight-bold m-b-5" text="Anzahl IOTA für BTC"></Label>
                             <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBTCIOTA"></TextField>
 
                             <Label class="label font-weight-bold m-b-5" text="Euro Wert für IOTA via BTC"></Label>
@@ -49,7 +53,7 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                             <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcAllUSDViaBTC"></TextField>
 
                             <Label class="label font-weight-bold m-b-5" text="USD Wert für Alles via ETH"></Label>
-                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcAllUSDViaETH"></TextField>
+                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcAllUSDViaETH"></TextField>-->
                         </StackLayout>
                     </StackLayout>
                 </ScrollView>
@@ -58,12 +62,16 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
     </ng-template>
 
 
-    <ng-template tabItem title="Calculation Bitstamp">
+    <ng-template tabItem title="Calculation Bitstamp/Bitfinex">
         <StackLayout>
             <PullToRefresh (refresh)="onRefreshTriggered($event)">
                 <ScrollView>
                     <StackLayout class="page form p-15">
-                        <Label class="label font-weight-bold m-b-5" text="Anzahl Litecoin für EUR"></Label>
+                        <StackLayout *ngFor="let calcResult of calcResultsPortfolios">
+                            <Label class="label font-weight-bold m-b-5" [text]="calcResult.description"></Label>
+                            <TextField isEnabled="false" class="input input-rounded m-b-10" [text]="calcResult.result"></TextField>
+                        </StackLayout>
+                        <!--<Label class="label font-weight-bold m-b-5" text="Anzahl Litecoin für EUR"></Label>
                         <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampLTCAmountEUR"></TextField>
 
                         <Label class="label font-weight-bold m-b-5" text="Anzahl BTC für EUR"></Label>
@@ -83,7 +91,7 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
 
 
                         <Label class="label font-weight-bold m-b-5" text="Euro Wert Ripples"></Label>
-                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampXRPEUR"></TextField>
+                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampXRPEUR"></TextField>-->
                     </StackLayout>
                 </ScrollView>
             </PullToRefresh>

@@ -25,6 +25,7 @@ export class CreatePortfolioItemComponent  {
     onCreatePortfolioItem() {
         this.portfolioItemService.createPortfolioItem(this.technicalName, this.description, 
                                                         this.quantity, this.portfolio, this.symbol);
+        this.portfolioItemService.savePortfolio();
 
         this.routerExtension.navigate(["/items"], { clearHistory: true });
     }

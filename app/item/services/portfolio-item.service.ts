@@ -53,6 +53,8 @@ export class PortfolioItemService {
 
 
     loadPortfolio() {
+        this.secureStorage.removeSync({key: "cryptoCoinCalcPortfolio"});
+
         let storedPortfolioString = this.secureStorage.getSync({
             key: "cryptoCoinCalcPortfolio",
         });

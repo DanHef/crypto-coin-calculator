@@ -25,6 +25,7 @@ export class CreateCurrencyPriceComponent  {
     createCurrencyPrice() {
         this.currencyPriceService.createCurrencyPrice(this.codeFrom, this.codeTo, this.description, this.platform);
 
+        this.currencyPriceService.saveCurrencyPrices();
         this.routerExtension.navigate(["/items"], { clearHistory: true });
     }
 }

@@ -1,0 +1,15 @@
+<StackLayout>
+    <Label text="Source Portfolio Name"></Label>
+    <TextField [(ngModel)]="sourcePortfolioItemName"></TextField>
+
+    <Label text="Target Currency"></Label>
+    <TextField [(ngModel)]="targetCurrencySymbol"></TextField>
+
+    <Label text="Platform"></Label>
+    <TextField [(ngModel)]="platform"></TextField>
+
+    <Label text="Description"></Label>
+    <TextField [(ngModel)]="description"></TextField>
+
+    <Button (tap)="createCalculationResult()" text="Create"></Button>
+</StackLayout>

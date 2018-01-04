@@ -9,7 +9,9 @@ import { ItemsComponent } from "./item/items.component";
 import { ItemDetailComponent } from "./item/item-detail.component";
 import { CreatePortfolioItemComponent } from "./item/create-portfolio-item/create-portfolio-item.component";
 import { CreateCurrencyPriceComponent } from "./item/create-currency-price/create-currency-price.component";
+import { CreateCalculationComponent } from "./item/create-calculation/create-calculation.component";
 import { CurrencyPriceService } from "./item/services/currency-price.service";
+import { CalculationService } from "./item/services/calculation.service";
 
 import * as elementRegistryModule from 'nativescript-angular/element-registry';
 import * as Admob from "nativescript-admob";
@@ -39,12 +41,14 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
         ItemsComponent,
         ItemDetailComponent,
         CreatePortfolioItemComponent,
-        CreateCurrencyPriceComponent
+        CreateCurrencyPriceComponent,
+        CreateCalculationComponent
     ],
     providers: [
         ItemService,
         PortfolioItemService,
-        CurrencyPriceService
+        CurrencyPriceService,
+        CalculationService
     ],
     schemas: [
         NO_ERRORS_SCHEMA

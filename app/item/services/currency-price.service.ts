@@ -52,6 +52,19 @@ export class CurrencyPriceService {
     }
 
 
+    getCurrencyPrice(codeFrom: string, codeTo: string, platform: string): CurrencyPrice {
+        for(var i=0; i<this.currencyPrices.length; i++) {
+            if((this.currencyPrices[i].currencyCodeFrom === codeFrom &&
+                this.currencyPrices[i].currencyCodeTo === codeTo) || 
+                (this.currencyPrices[i].currencyCodeFrom === codeTo &&
+                this.currencyPrices[i].currencyCodeTo === codeFrom) &&
+                this.currencyPrices[i].platform === platform) {
+                    return this.currencyPrices[i];
+                }
+        }
+    }
+
+
     saveCurrencyPrices() {
         this.secureStorage.setSync({
             key: "cryptoCoinCalcPriceInformationData",
@@ -60,6 +73,8 @@ export class CurrencyPriceService {
     }
 
     loadCurrencyPrices() {
+        this.secureStorage.removeSync({key: "cryptoCoinCalcPriceInformationData"});
+
         let storedPriceInformationString = this.secureStorage.getSync({
             key: "cryptoCoinCalcPriceInformationData",
         });
