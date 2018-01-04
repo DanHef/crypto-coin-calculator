@@ -15,6 +15,7 @@ import * as platformModule from "tns-core-modules/platform";
 import { Router, ActivatedRoute } from "@angular/router";
 import { PageRoute } from "nativescript-angular/router";
 import { BrowserPlatformLocation } from "@angular/platform-browser/src/browser/location/browser_platform_location";
+import { CalculationResult } from "./CalculationResult";
 
 //import * as configSettings from "../config.json";
 
@@ -30,6 +31,8 @@ export class ItemsComponent implements OnInit, AfterViewInit {
     private currencyPricesBitstamp: CurrencyPrice[] = [];
     private currencyPricesBitfinex: CurrencyPrice[] = [];
 
+    calcResultOverall: number = 0;
+
     private calcResultGeneral = [];
     private calcResultsPortfolios = [];
 
@@ -44,27 +47,6 @@ export class ItemsComponent implements OnInit, AfterViewInit {
     //private androidInterstitialId: string = "ca-app-pub-KKKK/LLLL";
     private iosBannerId: string = "ca-app-pub-3704439085032082/3863903252";
     private iosInterstitialId: string = "ca-app-pub-3704439085032082/6212479394";
-    
-
-    /*CalcIOTAEuro: string;
-    CalcIOTAUSDViaETH: string;
-    CalcIOTAUSDViaBTC: string;
-    CalcDashEuroViaBTC: string;
-    CalcDashUSD: string;
-    CalcBTCEuro: string;
-    CalcBTCUSD: string;
-    CalcBTCIOTA: string;
-    CalcAllEuroViaBTC: string;
-    CalcAllUSDViaETH: string;
-    CalcAllUSDViaBTC: string;
-
-    CalcBitstampLTCAmountEUR: string;
-    CalcBitstampBTCAmountEuro: string;
-    CalcBitstampXRPAmountEuro: string;
-    CalcBitstampLTCEUR: string;
-    CalcBitstampBTCEUR: string;
-    CalcBitstampXRPEUR: string;
-    CalcBitstampAllEuro: string;*/
 
 
     constructor(private readonly itemService: ItemService,
@@ -98,22 +80,6 @@ export class ItemsComponent implements OnInit, AfterViewInit {
         this.currencyPriceService.currencyPricesChanged.subscribe(function() {
             this.refreshMaintainedCurrencyPrices();
         }.bind(this));
-
-        /*this.pageRoute.activatedRoute.forEach(function() {
-            this.refreshPortfolio();
-            //this method only refreshes the currency price data from the local storage => to have the actual prices refresh on the data has to be performed
-            this.refreshMaintainedCurrencyPrices();
-            this.refreshMaintainedCalculationResults();
-    
-            //read data from the respective platforms
-            let promiseBitfinex = this.refreshBitfinexData();
-            let promiseBitstamp = this.refreshBitstampData();
-    
-            Promise.all([promiseBitfinex, promiseBitstamp]).then(() => {
-                this.calculateResults();
-                this.refreshMaintainedCalculationResults();
-            });
-        }.bind(this));*/
     }
 
     ngAfterViewInit() {
@@ -295,19 +261,35 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
     createPressed() {
         switch(this.tabSelectedIndex) {
-            case 1:
+            case 0:
                 //calculation field should be created
                 this.router.navigate(["/createCalculationResult"]);
                 break;
-            case 2: 
+            case 1: 
                 //portfolio item should be created
                 this.router.navigate(["/createPortfolioItem"]);
                 break;
-            case 3: 
+            case 2: 
                 //currency price should be created
                 this.router.navigate(["/createCurrencyPrice"]); 
                 break;
         }
+    }
+
+    calcResultDelete(calculationResult: CalculationResult) {
+        this.calculationService.deleteCalculationResult(calculationResult);
+        this.calculationService.saveCalculationResults();
+    }
+
+
+    portfolioItemDelete(portfolioItem: CoinPortfolioItem) {
+        this.portfolioItemService.deletePortfolioItem(portfolioItem);
+        this.portfolioItemService.savePortfolio();
+    }
+
+    currencyPriceDelete(currencyPrice: CurrencyPrice) {
+        this.currencyPriceService.deleteCurrencyPrice(currencyPrice);
+        this.currencyPriceService.saveCurrencyPrices();
     }
 
 

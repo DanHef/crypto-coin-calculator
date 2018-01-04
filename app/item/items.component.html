@@ -12,7 +12,7 @@ http://docs.nativescript.org/ui/action-bar
 -->
 
 <ActionBar style="margin-top: 50px;" title="Coin Calculator" class="action-bar">
-    <ActionItem *ngIf="tabSelectedIndex != 0" ios.position="right" ios.systemIcon="4" (tap)="createPressed()" [visible]="createButtonVisible"></ActionItem>
+    <ActionItem ios.position="right" ios.systemIcon="4" (tap)="createPressed()" [visible]="createButtonVisible"></ActionItem>
 </ActionBar>
 
 <!--
@@ -26,9 +26,8 @@ core theme, such as p-20, btn, h2, and list-group. You can view a full list of t
 class names available for styling your app at https://docs.nativescript.org/ui/theme.
 -->
 <!-- 100px für iPhone X; 50px für den Rest -->
-<TabView [style.margin-bottom]="tabBarMargin" class="tab-view" [(ngModel)]="tabSelectedIndex" 
-        selectedColor="#FF0000">
-    <ng-template tabItem title="Calculation">
+<TabView [style.margin-bottom]="tabBarMargin" class="tab-view" [(ngModel)]="tabSelectedIndex" selectedColor="#FF0000">
+    <!--<ng-template tabItem title="Calculation">
         <StackLayout>
             <PullToRefresh (refresh)="onRefreshTriggered($event)">
                 <ScrollView>
@@ -38,61 +37,32 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                                 <Label class="label font-weight-bold m-b-5" [text]="calcResultGeneral.description"></Label>
                                 <TextField isEnabled="false" class="input input-rounded m-b-10" [text]="calcResultGeneral.result"></TextField>
                             </StackLayout>
-                            <!--<Label class="label font-weight-bold m-b-5" text="Anzahl IOTA für BTC"></Label>
-                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBTCIOTA"></TextField>
-
-                            <Label class="label font-weight-bold m-b-5" text="Euro Wert für IOTA via BTC"></Label>
-                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcIOTAEuro"></TextField>
-
-                            <Label class="label font-weight-bold m-b-5" text="Euro Wert für BTC"></Label>
-                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBTCEuro"></TextField>
-
-                            <Label class="label font-weight-bold m-b-5" text="Euro Wert für Alles via BTC"></Label>
-                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcAllEuroViaBTC"></TextField>
-
-                            <Label class="label font-weight-bold m-b-5" text="USD Wert für Alles via BTC"></Label>
-                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcAllUSDViaBTC"></TextField>
-
-                            <Label class="label font-weight-bold m-b-5" text="USD Wert für Alles via ETH"></Label>
-                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcAllUSDViaETH"></TextField>-->
+                            <Label *ngIf="calcResultsGeneral.length == 0" text="No Calculation Fields defined"></Label>
                         </StackLayout>
                     </StackLayout>
                 </ScrollView>
             </PullToRefresh>
         </StackLayout>
-    </ng-template>
+    </ng-template>-->
 
-
-    <ng-template tabItem title="Calculation Bitstamp/Bitfinex">
+    <ng-template tabItem title="Calculation Results">
         <StackLayout>
             <PullToRefresh (refresh)="onRefreshTriggered($event)">
                 <ScrollView>
                     <StackLayout class="page form p-15">
+                        <!--<StackLayout>
+                            <Label text="" class="label font-weight-bold m-b-5"></Label>
+                            <TextField isEnabled="false" class="input input-rounded m-b-10" [text]="calcResultOverall"></TextField>
+                        </StackLayout>-->
                         <StackLayout *ngFor="let calcResult of calcResultsPortfolios">
-                            <Label class="label font-weight-bold m-b-5" [text]="calcResult.description"></Label>
-                            <TextField isEnabled="false" class="input input-rounded m-b-10" [text]="calcResult.result"></TextField>
+                            <GridLayout columns="*,2*" rows="*,*">
+                                <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="calcResult.description"></Label>
+                                <Button row="0" col="1" text="Delete" (tap)="calcResultDelete(calcResult)"></Button>
+
+                                <TextField row="1" colSpan="2" isEnabled="false" class="input input-rounded m-b-10" [text]="calcResult.result"></TextField>
+                            </GridLayout>
                         </StackLayout>
-                        <!--<Label class="label font-weight-bold m-b-5" text="Anzahl Litecoin für EUR"></Label>
-                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampLTCAmountEUR"></TextField>
-
-                        <Label class="label font-weight-bold m-b-5" text="Anzahl BTC für EUR"></Label>
-                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampBTCAmountEuro"></TextField>
-
-                        <Label class="label font-weight-bold m-b-5" text="Anzahl Ripple für EUR"></Label>
-                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampXRPAmountEuro"></TextField>
-
-                        <Label class="label font-weight-bold m-b-5" text="Euro Wert Insgesamt"></Label>
-                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampAllEuro"></TextField>
-
-                        <Label class="label font-weight-bold m-b-5" text="Euro Wert Litecoin"></Label>
-                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampLTCEUR"></TextField>
-
-                        <Label class="label font-weight-bold m-b-5" text="Euro Wert Bitcoins"></Label>
-                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampBTCEUR"></TextField>
-
-
-                        <Label class="label font-weight-bold m-b-5" text="Euro Wert Ripples"></Label>
-                        <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="CalcBitstampXRPEUR"></TextField>-->
+                        <Label *ngIf="calcResultsPortfolios.length == 0" text="No Calculation Fields defined"></Label>
                     </StackLayout>
                 </ScrollView>
             </PullToRefresh>
@@ -100,15 +70,20 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
     </ng-template>
 
 
-    <ng-template tabItem title="Bestand">
+    <ng-template tabItem title="Portfolio">
         <StackLayout>
             <PullToRefresh (refresh)="onRefreshTriggered($event)">
                 <ScrollView>
                     <StackLayout class="page form p-15">
                         <Label text="No Data Available" *ngIf="coinPortfolio.length == 0"></Label>
                         <StackLayout *ngFor="let portfolioItem of coinPortfolio">
-                            <Label class="label font-weight-bold m-b-5" [text]="portfolioItem.portfolioItemDescription"></Label>
-                            <TextField class="input input-rounded m-b-10" (ngModelChange)="onPortfolioItemQuantityChange($event, portfolioItem)" [ngModel]="portfolioItem.quantity"></TextField>
+                            <GridLayout columns="*,2*" rows="*,*">
+                                <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="portfolioItem.portfolioItemDescription"></Label>
+                                <Button row="0" col="1" text="Delete" (tap)="portfolioItemDelete(portfolioItem)"></Button>
+
+                                <TextField row="1" colSpan="2" class="input input-rounded m-b-10" (ngModelChange)="onPortfolioItemQuantityChange($event, portfolioItem)"
+                                    [ngModel]="portfolioItem.quantity"></TextField>
+                            </GridLayout>
                         </StackLayout>
                     </StackLayout>
                 </ScrollView>
@@ -122,17 +97,25 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
             <PullToRefresh (refresh)="onRefreshTriggered($event)">
                 <ScrollView>
                     <StackLayout class="page form p-15">
-                        <Label class="label font-weight-bold m-b-10" text="Bitstamp"></Label>
+                        <Label style="margin-bottom: 10px" class="label font-weight-bold m-b-10" text="Bitstamp"></Label>
                         <StackLayout *ngFor="let price of currencyPricesBitstamp">
-                            <Label class="label font-weight-bold m-b-5" [text]="price.currencyPriceDescription"></Label>
-                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="price.price"></TextField>
+                            <GridLayout columns="*,2*" rows="*,*">
+                                <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="price.currencyPriceDescription"></Label>
+                                <Button row="0" col="1" text="Delete" (tap)="currencyPriceDelete(price)"></Button>
+
+                                <TextField row="1" colSpan="2" class="input input-rounded m-b-10" isEnabled="false" [text]="price.price"></TextField>
+                            </GridLayout>
                         </StackLayout>
                         <Label *ngIf="currencyPricesBitstamp.length == 0" text="No Data for Bitstamp"></Label>
 
-                        <Label class="label font-weight-bold m-b-10" text="Bitfinex"></Label>
+                        <Label style="margin-top: 40px; margin-bottom: 10px" class="label font-weight-bold m-b-10" text="Bitfinex"></Label>
                         <StackLayout *ngFor="let priceBitfinex of currencyPricesBitfinex">
-                            <Label class="label font-weight-bold m-b-5" [text]="priceBitfinex.currencyPriceDescription"></Label>
-                            <TextField class="input input-rounded m-b-10" isEnabled="false" [text]="priceBitfinex.price"></TextField>
+                            <GridLayout columns="*,2*" rows="*,*">
+                                <Label class="label font-weight-bold m-b-5" [text]="priceBitfinex.currencyPriceDescription"></Label>
+                                <Button row="0" col="1" text="Delete" (tap)="currencyPriceDelete(priceBitfinex)"></Button>
+
+                                <TextField row="1" colSpan="2" class="input input-rounded m-b-10" isEnabled="false" [text]="priceBitfinex.price"></TextField>
+                            </GridLayout>
                         </StackLayout>
                         <Label *ngIf="currencyPricesBitfinex.length == 0" text="No Data for Bitfinex"></Label>
                     </StackLayout>

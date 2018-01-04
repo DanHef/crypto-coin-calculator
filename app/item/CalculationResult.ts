@@ -18,6 +18,26 @@ export class CalculationResult {
         this.description = description;
      };
 
+     getPlatform() {
+         return this.platform;
+     }
+
+     getDescription() {
+         return this.description;
+     }
+
+     getSourcePortfolioItem() {
+         return this.sourcePortfolioItem;
+     }
+
+     getTargetCurrencyPrice() {
+         return this.targetCurrencyPrice;
+     }
+
+     getTargetCurrency() {
+         return this.targetCurrency;
+     }
+
 
      getResult(): number {
         this.calculateResult();

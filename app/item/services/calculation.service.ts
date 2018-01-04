@@ -33,6 +33,19 @@ export class CalculationService {
     }
 
 
+    deleteCalculationResult(calculationResult: CalculationResult) {
+        for(var i=0; i<this.calculationResults.length; i++) {
+            let calcResult = this.calculationResults[i];
+            if(calcResult.getPlatform() === calculationResult.getPlatform() &&
+                calcResult.getDescription() === calculationResult.getDescription() &&
+                calcResult.getTargetCurrency() === calculationResult.getTargetCurrency() &&
+                calcResult.getSourcePortfolioItem() === calculationResult.getSourcePortfolioItem()) {
+                    this.calculationResults.splice(i,1);
+            }
+        }
+    }
+
+
     calculateAllResults() {
         for(var i=0; i<this.calculationResults.length; i++) {
             this.calculateResult(this.calculationResults[i]);

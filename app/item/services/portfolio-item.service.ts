@@ -7,7 +7,7 @@ import { SecureStorage } from "nativescript-secure-storage";
 @Injectable()
 export class PortfolioItemService {
     portfolioItems: Array<CoinPortfolioItem> = [];
-    secureStorage: SecureStorage = new SecureStorage();
+    private secureStorage: SecureStorage = new SecureStorage();
 
     constructor() { }
 
@@ -26,6 +26,17 @@ export class PortfolioItemService {
         this.portfolioItems.push(portfolioItem);
 
         return portfolioItem;
+    }
+
+    deletePortfolioItem(portfolioItem: CoinPortfolioItem) {
+        for(var i=0; i<this.portfolioItems.length; i++) {
+            let currentPortfolioItem = this.portfolioItems[i];
+            if(currentPortfolioItem.getPortfolioName() === portfolioItem.getPortfolioName() &&
+                currentPortfolioItem.getPortfolioItemName() === portfolioItem.getPortfolioItemName() &&
+                currentPortfolioItem.getSymbol() === portfolioItem.getSymbol()) {
+                    this.portfolioItems.splice(i,1);
+            }
+        }
     }
 
 

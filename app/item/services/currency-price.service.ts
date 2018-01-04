@@ -6,7 +6,7 @@ import { SecureStorage } from "nativescript-secure-storage";
 @Injectable()
 export class CurrencyPriceService {
     currencyPrices: Array<CurrencyPrice> = [];
-    secureStorage: SecureStorage = new SecureStorage();
+    private secureStorage: SecureStorage = new SecureStorage();
     public currencyPricesChanged = new EventEmitter<Object>();
 
     addCurrencyPrice(currencyPrice) {
@@ -26,6 +26,22 @@ export class CurrencyPriceService {
         });
 
         return newCurrencyPrice;
+    }
+
+    deleteCurrencyPrice(currencyPrice: CurrencyPrice) {
+        for(var i=0; i<this.currencyPrices.length; i++) {
+            let currentCurrencyPrice = this.currencyPrices[i];
+            if(currentCurrencyPrice.platform === currencyPrice.platform &&
+                currentCurrencyPrice.currencyCodeFrom === currencyPrice.currencyCodeFrom &&
+                currentCurrencyPrice.currencyCodeTo === currencyPrice.currencyCodeTo) {
+                    this.currencyPrices.splice(i,1);
+                    this.currencyPricesChanged.emit({
+                        data: null, 
+                        message: null, 
+                        notification: null
+                    });
+            }
+        }
     }
 
 
