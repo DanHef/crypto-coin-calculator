@@ -57,9 +57,9 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                         <StackLayout *ngFor="let calcResult of calcResultsPortfolios">
                             <GridLayout columns="*,2*" rows="*,*">
                                 <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="calcResult.description"></Label>
-                                <Button row="0" col="1" text="Delete" (tap)="calcResultDelete(calcResult)"></Button>
+                                <Button row="0" col="1" text="Delete" style="text-align: right" (tap)="calcResultDelete(calcResult)"></Button>
 
-                                <TextField row="1" colSpan="2" isEnabled="false" class="input input-rounded m-b-10" [text]="calcResult.result"></TextField>
+                                <TextField row="1" colSpan="2" isEnabled="false" class="input right" [text]="calcResult.result"></TextField>
                             </GridLayout>
                         </StackLayout>
                         <Label *ngIf="calcResultsPortfolios.length == 0" text="No Calculation Fields defined"></Label>
@@ -77,9 +77,9 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                     <StackLayout class="page form p-15">
                         <Label text="No Data Available" *ngIf="coinPortfolio.length == 0"></Label>
                         <StackLayout *ngFor="let portfolioItem of coinPortfolio">
-                            <GridLayout columns="*,2*" rows="*,*">
+                            <GridLayout columns="*,2*" rows="*,auto">
                                 <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="portfolioItem.portfolioItemDescription"></Label>
-                                <Button row="0" col="1" text="Delete" (tap)="portfolioItemDelete(portfolioItem)"></Button>
+                                <Button row="0" col="1" style="text-align: right" text="Delete" (tap)="portfolioItemDelete(portfolioItem)"></Button>
 
                                 <TextField row="1" colSpan="2" class="input input-rounded m-b-10" (ngModelChange)="onPortfolioItemQuantityChange($event, portfolioItem)"
                                     [ngModel]="portfolioItem.quantity"></TextField>
@@ -101,9 +101,9 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                         <StackLayout *ngFor="let price of currencyPricesBitstamp">
                             <GridLayout columns="*,2*" rows="*,*">
                                 <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="price.currencyPriceDescription"></Label>
-                                <Button row="0" col="1" text="Delete" (tap)="currencyPriceDelete(price)"></Button>
+                                <Button row="0" col="1" style="text-align: right" text="Delete" (tap)="currencyPriceDelete(price)"></Button>
 
-                                <TextField row="1" colSpan="2" class="input input-rounded m-b-10" isEnabled="false" [text]="price.price"></TextField>
+                                <TextField row="1" colSpan="2" class="input right" isEnabled="false" [text]="price.price"></TextField>
                             </GridLayout>
                         </StackLayout>
                         <Label *ngIf="currencyPricesBitstamp.length == 0" text="No Data for Bitstamp"></Label>
@@ -112,9 +112,9 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                         <StackLayout *ngFor="let priceBitfinex of currencyPricesBitfinex">
                             <GridLayout columns="*,2*" rows="*,*">
                                 <Label class="label font-weight-bold m-b-5" [text]="priceBitfinex.currencyPriceDescription"></Label>
-                                <Button row="0" col="1" text="Delete" (tap)="currencyPriceDelete(priceBitfinex)"></Button>
+                                <Button row="0" col="1" style="text-align: right" text="Delete" (tap)="currencyPriceDelete(priceBitfinex)"></Button>
 
-                                <TextField row="1" colSpan="2" class="input input-rounded m-b-10" isEnabled="false" [text]="priceBitfinex.price"></TextField>
+                                <TextField row="1" colSpan="2" class="input right" isEnabled="false" [text]="priceBitfinex.price"></TextField>
                             </GridLayout>
                         </StackLayout>
                         <Label *ngIf="currencyPricesBitfinex.length == 0" text="No Data for Bitfinex"></Label>

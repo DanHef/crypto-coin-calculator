@@ -17,8 +17,6 @@ import { PageRoute } from "nativescript-angular/router";
 import { BrowserPlatformLocation } from "@angular/platform-browser/src/browser/location/browser_platform_location";
 import { CalculationResult } from "./CalculationResult";
 
-//import * as configSettings from "../config.json";
-
 
 @Component({
     selector: "ns-items",
@@ -60,22 +58,23 @@ export class ItemsComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         //initialize buffers
         this.portfolioItemService.loadPortfolio();
-        this.currencyPriceService.loadCurrencyPrices();
-        this.calculationService.loadCurrencyPrices();
-
-        this.refreshPortfolio();
-        //this method only refreshes the currency price data from the local storage => to have the actual prices refresh on the data has to be performed
-        this.refreshMaintainedCurrencyPrices();
-        this.refreshMaintainedCalculationResults();
-
-        //read data from the respective platforms
-        let promiseBitfinex = this.refreshBitfinexData();
-        let promiseBitstamp = this.refreshBitstampData();
-
-        Promise.all([promiseBitfinex, promiseBitstamp]).then(() => {
-            this.calculateResults();
+        this.currencyPriceService.loadCurrencyPrices().then(function() {
+            this.calculationService.loadCurrencyPrices();
+            
+            this.refreshPortfolio();
+            //this method only refreshes the currency price data from the local storage => to have the actual prices refresh on the data has to be performed
+            this.refreshMaintainedCurrencyPrices();
             this.refreshMaintainedCalculationResults();
-        });
+    
+            //read data from the respective platforms
+            let promiseBitfinex = this.refreshBitfinexData();
+            let promiseBitstamp = this.refreshBitstampData();
+    
+            Promise.all([promiseBitfinex, promiseBitstamp]).then(() => {
+                this.calculateResults();
+                this.refreshMaintainedCalculationResults();
+            });
+        }.bind(this));
 
         this.currencyPriceService.currencyPricesChanged.subscribe(function() {
             this.refreshMaintainedCurrencyPrices();
@@ -102,6 +101,7 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
         let promiseBitfinex = this.refreshBitfinexData();
         let promiseBitstamp = this.refreshBitstampData();
+        
 
         Promise.all([promiseBitfinex, promiseBitstamp]).then(() => {
             this.calculateResults();
@@ -164,17 +164,6 @@ export class ItemsComponent implements OnInit, AfterViewInit {
     //----------------------
 
 
-    getCourse(from, to, platform): number {
-        return this.currencyPriceService.getCurrencyPriceAmount(from, to, platform);
-    }
-
-    getQuantity(portfolioItem: CoinPortfolioItem): number {
-        if (portfolioItem) {
-            return portfolioItem.getQuantity();
-        }
-    }
-
-
     getCoinPortfolioItem(portfolioItemName: string, portfolio: string): CoinPortfolioItem {
         return this.portfolioItemService.getPortfolioItemByTechnicalName(portfolioItemName, portfolio);
     }
@@ -191,69 +180,7 @@ export class ItemsComponent implements OnInit, AfterViewInit {
         this.portfolioItemService.savePortfolio();
         this.currencyPriceService.saveCurrencyPrices();
     }
-
-
-    /*initializePortfolio() {
-        //create bitstamp portfolio items
-        //bitstampLitecoins
-        this.createPortfolioItem("bitstampLitecoins",
-            "Bitstamp - Litecoins",
-            "bitstamp");
-
-        //bitstampEuro
-        this.createPortfolioItem("bitstampEuro",
-            "Bitstamp - Verfügbare Euro",
-            "bitstamp");
-
-        //bitstampBTC
-        this.createPortfolioItem("bitstampBTC",
-            "Bitstamp - Bitcoins",
-            "bitstamp");
-
-
-        //bitstampRipples
-        this.createPortfolioItem("bitstampRipples",
-            "Bitstamp - Ripples",
-            "bitstamp");
-
-        //create bitfinex portfolio items
-        //bitfinexIOTA
-        this.createPortfolioItem("bitfinexIOTA",
-            "Bitfinex - IOTA",
-            "bitfinex");
-
-        //bitfinexBTC
-        this.createPortfolioItem("bitfinexBTC",
-            "Bitfinex - Bitcoins",
-            "bitfinex");
-
-        //bitfinexDash
-        this.createPortfolioItem("bitfinexDash",
-            "Bitfinex - Dash",
-            "bitfinex");
-    }*/
-
-
-    /*initializePrices() {
-        this.createPriceInformation("ltc", "eur", "bitstamp", "LTC/EUR");
-        this.createPriceInformation("btc", "eur", "bitstamp", "BTC/EUR");
-        this.createPriceInformation("xrp", "eur", "bitstamp", "XRP/EUR");
-
-        this.createPriceInformation("iot", "btc", "bitfinex", "IOTA/BTC");
-        this.createPriceInformation("btc", "eur", "bitfinex", "BTC/EUR");
-        this.createPriceInformation("eth", "usd", "bitfinex", "ETH/USD");
-        this.createPriceInformation("iot", "eth", "bitfinex", "IOTA/ETH");
-        this.createPriceInformation("btc", "usd", "bitfinex", "BTC/USD");
-        this.createPriceInformation("dsh", "usd", "bitfinex", "DSH/USD");
-        this.createPriceInformation("dsh", "btc", "bitfinex", "DSH/BTC");
-
-        this.savePriceInformation();
-    }*/
-
-
-    /*createPriceInformation(from: string, to: string, description: string, platform: string): CurrencyPrice {
-        return this.currencyPriceService.createCurrencyPrice(from, to, description, platform);
-    }*/
+   
 
     savePriceInformation() {
         this.currencyPriceService.saveCurrencyPrices();
@@ -344,109 +271,4 @@ export class ItemsComponent implements OnInit, AfterViewInit {
             });
         }.bind(this), 0);
     }
-
-
-    //calculations
-    /*calculateAll() {
-        this.calculateIOTAEuroViaBTC();
-        this.calculateDashEuroViaBTC();
-        this.calculateDashUSD();
-        this.calculateBTCIOTA();
-        this.calculateBTCEuro();
-        this.calculateBTCUSD();
-        this.calculateIOTAUSDViaBTC();
-        this.calculateIOTAUSDViaETH();
-
-        this.calculateAllEuroViaBTC();
-        this.calculateAllUSDViaBTC();
-        this.calculateAllUSDViaEthereum();
-
-        this.calculateAllBitstamp();
-    }
-
-    calculateIOTAEuroViaBTC() {
-        let result = (this.getCoinPortfolioItem("bitfinexIOTA", "bitfinex").getQuantity() * this.getCourse("iot", "btc", "bitfinex")) * this.getCourse("btc", "eur", "bitfinex");
-        this.CalcIOTAEuro = result.toString();
-    }
-
-    calculateDashEuroViaBTC() {
-        let result = (this.getCoinPortfolioItem("bitfinexDash", "bitfinex").getQuantity() * this.getCourse("dsh", "btc", "bitfinex")) * this.getCourse("btc", "eur", "bitfinex");
-        this.CalcDashEuroViaBTC = result.toString();
-    }
-
-    calculateDashUSD() {
-        let result = this.getCoinPortfolioItem("bitfinexDash", "bitfinex").getQuantity() * this.getCourse("dsh", "usd", "bitfinex");
-        this.CalcDashUSD = result.toString();
-    }
-
-    calculateBTCEuro() {
-        let result = this.getCoinPortfolioItem("bitfinexBTC", "bitfinex").getQuantity() * this.getCourse("btc", "eur", "bitfinex");
-        this.CalcBTCEuro = result.toString();
-    }
-
-    calculateBTCUSD() {
-        let result = this.getCoinPortfolioItem("bitfinexBTC", "bitfinex").getQuantity() * this.getCourse("btc", "usd", "bitfinex");
-        this.CalcBTCUSD = result.toString();
-    }
-
-    calculateIOTAUSDViaETH() {
-        let result = (this.getCoinPortfolioItem("bitfinexIOTA", "bitfinex").getQuantity() * this.getCourse("iot", "eth", "bitfinex")) * this.getCourse("eth", "usd", "bitfinex");
-        this.CalcIOTAUSDViaETH = result.toString();
-    }
-
-    calculateIOTAUSDViaBTC() {
-        let result = (this.getCoinPortfolioItem("bitfinexIOTA", "bitfinex").getQuantity() * this.getCourse("iot", "btc", "bitfinex")) * this.getCourse("btc", "usd", "bitfinex");
-        this.CalcIOTAUSDViaBTC = result.toString();
-    }
-
-    calculateAllEuroViaBTC() {
-        let result = parseFloat(this.CalcBTCEuro) + parseFloat(this.CalcIOTAEuro) + parseFloat(this.CalcDashEuroViaBTC);
-        this.CalcAllEuroViaBTC = result.toString();
-    }
-
-    calculateAllUSDViaEthereum() {
-        let result = parseFloat(this.CalcIOTAUSDViaETH) + parseFloat(this.CalcBTCUSD) + parseFloat(this.CalcDashUSD);
-        this.CalcAllUSDViaETH = result.toString();
-    }
-
-    calculateAllUSDViaBTC() {
-        let result = parseFloat(this.CalcIOTAUSDViaBTC) + parseFloat(this.CalcBTCUSD) + parseFloat(this.CalcDashUSD);
-        this.CalcAllUSDViaBTC = result.toString();
-    }
-
-    calculateBTCIOTA() {
-        let result = this.getCoinPortfolioItem("bitfinexBTC", "bitfinex").getQuantity() / this.getCourse("iot", "btc", "bitfinex");
-        this.CalcBTCIOTA = result.toString();
-    }
-
-
-    calculateAllBitstamp() {
-        let quantity = this.getCoinPortfolioItem("bitstampEuro", "bitstamp").getQuantity();
-        let result = quantity / this.getCourse("ltc", "eur", "bitstamp");
-        this.CalcBitstampLTCAmountEUR = result.toString();
-
-        quantity = this.getCoinPortfolioItem("bitstampEuro", "bitstamp").getQuantity();
-        result = quantity / this.getCourse("btc", "eur", "bitstamp");
-        this.CalcBitstampBTCAmountEuro = result.toString();
-
-        quantity = this.getCoinPortfolioItem("bitstampEuro", "bitstamp").getQuantity();
-        result = quantity / this.getCourse("xrp", "eur", "bitstamp");
-        this.CalcBitstampXRPAmountEuro = result.toString();
-
-        quantity = this.getCoinPortfolioItem("bitstampLitecoins", "bitstamp").getQuantity();
-        result = quantity * this.getCourse("ltc", "eur", "bitstamp");
-        this.CalcBitstampLTCEUR = result.toString();
-
-        quantity = this.getCoinPortfolioItem("bitstampBTC", "bitstamp").getQuantity();
-        result = quantity * this.getCourse("btc", "eur", "bitstamp");
-        this.CalcBitstampBTCEUR = result.toString();
-
-        quantity = this.getCoinPortfolioItem("bitstampRipples", "bitstamp").getQuantity();
-        result = quantity * this.getCourse("xrp", "eur", "bitstamp");
-        this.CalcBitstampXRPEUR = result.toString();
-
-        result = parseFloat(this.CalcBitstampBTCEUR) + parseFloat(this.CalcBitstampLTCEUR) + parseFloat(this.CalcBitstampXRPEUR);
-        this.CalcBitstampAllEuro = result.toString();
-    }*/
-    
 }

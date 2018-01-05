@@ -12,6 +12,7 @@ import { CreateCurrencyPriceComponent } from "./item/create-currency-price/creat
 import { CreateCalculationComponent } from "./item/create-calculation/create-calculation.component";
 import { CurrencyPriceService } from "./item/services/currency-price.service";
 import { CalculationService } from "./item/services/calculation.service";
+import { PlatformService } from "./item/services/platform.service";
 
 import * as elementRegistryModule from 'nativescript-angular/element-registry';
 import * as Admob from "nativescript-admob";
@@ -48,7 +49,8 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
         ItemService,
         PortfolioItemService,
         CurrencyPriceService,
-        CalculationService
+        CalculationService,
+        PlatformService
     ],
     schemas: [
         NO_ERRORS_SCHEMA
