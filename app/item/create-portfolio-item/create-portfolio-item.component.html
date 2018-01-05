@@ -1,18 +1,18 @@
-<StackLayout>
-    <Label text="Symbol:"></Label>
-    <TextField [(ngModel)]="symbol"></TextField>
+<StackLayout class="page form p-15">
+    <Label class="label font-weight-bold m-b-10" text="Symbol:"></Label>
+    <TextField class="input input-rounded m-b-10" [(ngModel)]="symbol"></TextField>
 
-    <Label text="Portfolio Item Technical Name:"></Label>
-    <TextField [(ngModel)]="technicalName"></TextField>
+    <Label class="label font-weight-bold m-b-10" text="Portfolio Item Technical Name:"></Label>
+    <TextField class="input input-rounded m-b-10" [(ngModel)]="technicalName"></TextField>
 
-    <Label text="Portfolio Item Description:"></Label>
-    <TextField [(ngModel)]="description"></TextField>
+    <Label class="label font-weight-bold m-b-10" text="Portfolio Item Description:"></Label>
+    <TextField class="input input-rounded m-b-10" [(ngModel)]="description"></TextField>
 
-    <Label text="Quantity:"></Label>
-    <TextField [(ngModel)]="quantity"></TextField>
+    <Label class="label font-weight-bold m-b-10" text="Quantity:"></Label>
+    <TextField class="input input-rounded m-b-10" [(ngModel)]="quantity"></TextField>
 
-    <Label text="Platform:"></Label>
-    <TextField [(ngModel)]="portfolio"></TextField>
+    <Label class="label font-weight-bold m-b-10" text="Platform:"></Label>
+    <TextField class="input input-rounded m-b-10" [(ngModel)]="portfolio"></TextField>
 
-    <Button (tap)="onCreatePortfolioItem()" text="Create"></Button>
+    <Button class="btn btn-primary" (tap)="onCreatePortfolioItem()" text="Create"></Button>
 </StackLayout>

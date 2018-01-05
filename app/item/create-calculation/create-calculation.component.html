@@ -1,15 +1,15 @@
-<StackLayout>
-    <Label text="Source Portfolio Name"></Label>
-    <TextField [(ngModel)]="sourcePortfolioItemName"></TextField>
+<StackLayout class="page form p-15">
+    <Label class="label font-weight-bold m-b-10" text="Source Portfolio Name"></Label>
+    <TextField class="input input-rounded m-b-10" [(ngModel)]="sourcePortfolioItemName"></TextField>
 
-    <Label text="Target Currency"></Label>
-    <TextField [(ngModel)]="targetCurrencySymbol"></TextField>
+    <Label class="label font-weight-bold m-b-10" text="Target Currency"></Label>
+    <TextField class="input input-rounded m-b-10" [(ngModel)]="targetCurrencySymbol"></TextField>
 
-    <Label text="Platform"></Label>
-    <TextField [(ngModel)]="platform"></TextField>
+    <Label class="label font-weight-bold m-b-10" text="Platform"></Label>
+    <TextField class="input input-rounded m-b-10" [(ngModel)]="platform"></TextField>
 
-    <Label text="Description"></Label>
-    <TextField [(ngModel)]="description"></TextField>
+    <Label class="label font-weight-bold m-b-10" text="Description"></Label>
+    <TextField class="input input-rounded m-b-10" [(ngModel)]="description"></TextField>
 
-    <Button (tap)="createCalculationResult()" text="Create"></Button>
+    <Button class="btn btn-primary" (tap)="createCalculationResult()" text="Create"></Button>
 </StackLayout>

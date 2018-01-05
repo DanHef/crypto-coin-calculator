@@ -1,15 +1,15 @@
-<StackLayout>
-        <Label text="Currency Code From:"></Label>
-        <TextField [(ngModel)]="codeFrom"></TextField>
+<StackLayout class="page form p-15">
+        <Label class="label font-weight-bold m-b-10" text="Currency Code From:"></Label>
+        <TextField class="input input-rounded m-b-10" [(ngModel)]="codeFrom"></TextField>
     
-        <Label text="Currency Code To:"></Label>
-        <TextField [(ngModel)]="codeTo"></TextField>
+        <Label class="label font-weight-bold m-b-10" text="Currency Code To:"></Label>
+        <TextField class="input input-rounded m-b-10" [(ngModel)]="codeTo"></TextField>
     
-        <Label text="Platform:"></Label>
-        <TextField [(ngModel)]="platform"></TextField>
+        <Label class="label font-weight-bold m-b-10" text="Platform:"></Label>
+        <TextField class="input input-rounded m-b-10" [(ngModel)]="platform"></TextField>
     
-        <Label text="Description:"></Label>
-        <TextField [(ngModel)]="description"></TextField>
+        <Label class="label font-weight-bold m-b-10" text="Description:"></Label>
+        <TextField class="input input-rounded m-b-10" [(ngModel)]="description"></TextField>
     
-        <Button (tap)="createCurrencyPrice()" text="Create"></Button>
+        <Button class="btn btn-primary" (tap)="createCurrencyPrice()" text="Create"></Button>
     </StackLayout>
