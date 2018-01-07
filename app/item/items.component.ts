@@ -156,8 +156,9 @@ export class ItemsComponent implements OnInit, AfterViewInit {
     }
 
     calculateResults() {
-        this.calculationService.calculateAllResults();
-        this.calcResultsPortfolios = this.calculationService.getAllCalculationResults();
+        this.calculationService.calculateAllResults().then(function(calculationResults) {
+            this.calcResultsPortfolios = calculationResults;
+        }.bind(this));
     }
     //----------------------
     //END: data refresh logic

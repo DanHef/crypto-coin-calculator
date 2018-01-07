@@ -39,8 +39,8 @@ export class CalculationResult {
      }
 
 
-     getResult(): number {
-        this.calculateResult();
+     getResult(price: number): number {
+        this.result = this.sourcePortfolioItem.getQuantity() * price;
         return this.result;
      }
 

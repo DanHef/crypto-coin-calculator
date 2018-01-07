@@ -45,8 +45,8 @@ export class PlatformService {
     }
 
     private createCurrencyPriceFromSymbol(symbolPair: string, platform: string) {
-        let sourceSymbol = symbolPair.slice(0,2);
-        let targetSymbol = symbolPair.slice(3,5);
+        let sourceSymbol = symbolPair.slice(0,3);
+        let targetSymbol = symbolPair.slice(3,6);
 
         return new CurrencyPrice(sourceSymbol, targetSymbol, platform);
     }
