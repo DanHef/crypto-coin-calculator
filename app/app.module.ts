@@ -14,6 +14,8 @@ import { CurrencyPriceService } from "./item/services/currency-price.service";
 import { CalculationService } from "./item/services/calculation.service";
 import { PlatformService } from "./item/services/platform.service";
 
+import { DropDownModule } from "nativescript-drop-down/angular";
+
 import * as elementRegistryModule from 'nativescript-angular/element-registry';
 import * as Admob from "nativescript-admob";
 
@@ -35,7 +37,8 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
         NativeScriptModule,
         AppRoutingModule,
         NativeScriptFormsModule,
-        NativeScriptHttpModule
+        NativeScriptHttpModule,
+        DropDownModule
     ],
     declarations: [
         AppComponent,

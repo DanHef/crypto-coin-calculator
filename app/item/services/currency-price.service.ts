@@ -69,6 +69,24 @@ export class CurrencyPriceService {
     }
 
 
+    getAllCurrencyPricesIgnoringDisplaySetting(platform?: string): Array<CurrencyPrice> {
+        let currencyPrices;
+
+        if (platform) {
+            currencyPrices = [];
+            for (var i = 0; i < this.currencyPrices.length; i++) {
+                if (this.currencyPrices[i].platform === platform) {
+                    currencyPrices.push(this.currencyPrices[i]);
+                }
+            }
+        } else {
+            currencyPrices = this.currencyPrices;
+        }
+
+        return currencyPrices;
+    }
+
+
     getCurrencyPriceAmount(codeFrom: string, codeTo: string, platform: string): number {
         for (var i = 0; i < this.currencyPrices.length; i++) {
             if (this.currencyPrices[i].currencyCodeFrom === codeFrom &&
@@ -96,6 +114,9 @@ export class CurrencyPriceService {
     getCurrencyPriceForDisplay(codeFrom, codeTo, platform) {
         let currencyPrice = this.getCurrencyPrice(codeFrom, codeTo, platform);
 
+        if(!currencyPrice) {
+            return null;
+        }
         if(currencyPrice.getDescription() != undefined) {
             return currencyPrice;
         } else {
@@ -165,4 +186,36 @@ export class CurrencyPriceService {
         });
         
     }
+
+    public getDistinctCurrencySymbols(platform: string): Array<string> {
+        let allCurrencyPrices = this.getAllCurrencyPricesIgnoringDisplaySetting(platform);
+        let allSymbols = [];
+
+        for(var i=0; i<allCurrencyPrices.length; i++) {
+            let currencyPrice = allCurrencyPrices[i];
+            let symbolFromFound = false;
+            let symbolToFound = false;
+
+            for(var j=0; j<allSymbols.length; j++) {
+                if(allSymbols[j] === currencyPrice.currencyCodeFrom) {
+                    symbolFromFound = true;
+                }
+
+                if(allSymbols[j] === currencyPrice.currencyCodeTo) {
+                    symbolToFound = true;
+                }
+            }
+
+            if(!symbolFromFound) {
+                allSymbols.push(currencyPrice.currencyCodeFrom);
+            }
+
+            if(!symbolToFound) {
+                allSymbols.push(currencyPrice.currencyCodeTo);
+            }
+        }
+
+        return allSymbols;
+    }
+    
 }

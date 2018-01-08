@@ -1,6 +1,14 @@
 <StackLayout class="page form p-15">
+    <Label class="label font-weight-bold m-b-10" text="Platform:"></Label>
+    <DropDown #dd [items]="platformList" [hint]="hint" [selectedIndex]="selectedIndexPlatformList" (selectedIndexChanged)="onPlatformChange($event)"
+        style="margin-top: 5px; margin-bottom: 25px"></DropDown>
+    <!--<TextField class="input input-rounded m-b-10" [(ngModel)]="portfolio"></TextField>-->
+
     <Label class="label font-weight-bold m-b-10" text="Symbol:"></Label>
-    <TextField class="input input-rounded m-b-10" [(ngModel)]="symbol"></TextField>
+    <DropDown #ddSymbols [items]="currencySymbolList" [selectedIndex]="selectedIndexCurrencySymbol" hint="Currency Code From"
+    (selectedIndexChanged)="onCurrencySymbolChange($event)" style="margin-top: 5px; margin-bottom: 25px"></DropDown>
+
+    <!--<TextField class="input input-rounded m-b-10" [(ngModel)]="symbol"></TextField>-->
 
     <Label class="label font-weight-bold m-b-10" text="Portfolio Item Technical Name:"></Label>
     <TextField class="input input-rounded m-b-10" [(ngModel)]="technicalName"></TextField>
@@ -10,9 +18,6 @@
 
     <Label class="label font-weight-bold m-b-10" text="Quantity:"></Label>
     <TextField class="input input-rounded m-b-10" [(ngModel)]="quantity"></TextField>
-
-    <Label class="label font-weight-bold m-b-10" text="Platform:"></Label>
-    <TextField class="input input-rounded m-b-10" [(ngModel)]="portfolio"></TextField>
 
     <Button class="btn btn-primary" (tap)="onCreatePortfolioItem()" text="Create"></Button>
 </StackLayout>
