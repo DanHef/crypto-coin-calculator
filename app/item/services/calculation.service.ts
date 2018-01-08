@@ -76,7 +76,7 @@ export class CalculationService {
         let platform = calculationResult.getPlatform();
 
         //try to find a direct currency price
-        let basicCurrencyPrice = this.currencyPriceService.getCurrencyPrice(sourceSymbol, targetSymbol, platform);
+        let basicCurrencyPrice = this.currencyPriceService.getCurrencyPriceForDisplay(sourceSymbol, targetSymbol, platform);
         if (!basicCurrencyPrice) {
             //no direct currency price available => find fastest route to target currency
             return this.determineFastestCurrencyPrice(sourceSymbol, targetSymbol, platform);

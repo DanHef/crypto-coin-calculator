@@ -93,6 +93,17 @@ export class CurrencyPriceService {
     }
 
 
+    getCurrencyPriceForDisplay(codeFrom, codeTo, platform) {
+        let currencyPrice = this.getCurrencyPrice(codeFrom, codeTo, platform);
+
+        if(currencyPrice.getDescription() != undefined) {
+            return currencyPrice;
+        } else {
+            return null;
+        }
+    }
+
+
     saveCurrencyPrices() {
         this.secureStorage.setSync({
             key: "cryptoCoinCalcPriceInformationData",
