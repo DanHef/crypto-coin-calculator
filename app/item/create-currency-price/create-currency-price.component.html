@@ -1,23 +1,23 @@
 <StackLayout class="page form p-15">
-    <Label class="label font-weight-bold m-b-10" text="Platform:"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formPlatform' | translate }}"></Label>
     <DropDown #dd [items]="platformList" [hint]="hint" [selectedIndex]="selectedIndexPlatformList" (selectedIndexChanged)="onPlatformChange($event)"
         style="margin-top: 5px; margin-bottom: 25px"></DropDown>
     <!-- <TextField class="input input-rounded m-b-10" [(ngModel)]="platform"></TextField>-->
 
-    <Label class="label font-weight-bold m-b-10" text="Currency Code From:"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formCurrencyCodeFrom' | translate }}"></Label>
     <DropDown #ddSymbols [items]="currencySymbolList" [selectedIndex]="selectedIndexCodeFrom" hint="Currency Code From"
     (selectedIndexChanged)="onCurrencyCodeFromChange($event)" style="margin-top: 5px; margin-bottom: 25px"></DropDown>
 
     <!--<TextField class="input input-rounded m-b-10" [(ngModel)]="codeFrom"></TextField>-->
 
-    <Label class="label font-weight-bold m-b-10" text="Currency Code To:"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formCurrencyCodeTo' | translate }}"></Label>
     <DropDown #ddSymbols [items]="currencySymbolList" [selectedIndex]="selectedIndexCodeTo" hint="Currency Code To"
     (selectedIndexChanged)="onCurrencyCodeToChange($event)" style="margin-top: 5px; margin-bottom: 25px"></DropDown>
 
     <!--<TextField class="input input-rounded m-b-10" [(ngModel)]="codeTo"></TextField>-->
 
-    <Label class="label font-weight-bold m-b-10" text="Description:"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formDescription' | translate }}"></Label>
     <TextField class="input input-rounded m-b-10" [(ngModel)]="description"></TextField>
 
-    <Button class="btn btn-primary" (tap)="createCurrencyPrice()" text="Create"></Button>
+    <Button class="btn btn-primary" (tap)="createCurrencyPrice()" text="{{ 'formButtonCreate' | translate }}"></Button>
 </StackLayout>

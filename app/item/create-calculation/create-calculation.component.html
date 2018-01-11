@@ -1,14 +1,14 @@
 <StackLayout class="page form p-15">
-    <Label class="label font-weight-bold m-b-10" text="Platform"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formPlatform' | translate }}"></Label>
     <DropDown #dd [items]="platformList" [hint]="hint" [selectedIndex]="selectedIndexPlatformList" (selectedIndexChanged)="onPlatformChange($event)"
         style="margin-top: 5px; margin-bottom: 25px"></DropDown>
 
-    <Label class="label font-weight-bold m-b-10" text="Source Portfolio Name"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formSourcePortfolioName' | translate }}"></Label>
     <DropDown #ddSourcePortfolio [items]="sourcePortfolioNames" [selectedIndex]="selectedIndexSourcePortfolio" hint="Source Portfolio Item"
         (selectedIndexChanged)="onSourcePortfolioChange($event)" style="margin-top: 5px; margin-bottom: 25px"></DropDown>
     <!--<TextField class="input input-rounded m-b-10" [(ngModel)]="sourcePortfolioItemName"></TextField>-->
 
-    <Label class="label font-weight-bold m-b-10" text="Target Currency"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formTargetCurrency' | translate }}"></Label>
     <DropDown #ddSymbols [items]="targetCurrencySymbolList" [selectedIndex]="selectedIndexTargetCurrency" hint="Target Currency Symbol"
         (selectedIndexChanged)="onTargetCurrencyChange($event)" style="margin-top: 5px; margin-bottom: 25px"></DropDown>
     <!--<TextField class="input input-rounded m-b-10" [(ngModel)]="targetCurrencySymbol"></TextField>-->
@@ -16,8 +16,8 @@
     <!--<Label class="label font-weight-bold m-b-10" text="Platform"></Label>
     <TextField class="input input-rounded m-b-10" [(ngModel)]="platform"></TextField>-->
 
-    <Label class="label font-weight-bold m-b-10" text="Description"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formDescription' | translate }}"></Label>
     <TextField class="input input-rounded m-b-10" [(ngModel)]="description"></TextField>
 
-    <Button class="btn btn-primary" (tap)="createCalculationResult()" text="Create"></Button>
+    <Button class="btn btn-primary" (tap)="createCalculationResult()" text="{{ 'formButtonCreate' | translate }}"></Button>
 </StackLayout>

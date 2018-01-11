@@ -27,7 +27,12 @@ import { NativeScriptFormsModule } from "nativescript-angular/forms";
 // Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
 import { NativeScriptHttpModule } from "nativescript-angular/http";
 
+import { Http } from "@angular/http";
+import { TranslateModule, TranslateLoader, TranslateStaticLoader, TranslateService } from "ng2-translate";
 
+export function createTranslateLoader(http: Http) {
+    return new TranslateStaticLoader(http, '/./i18n', '.json');
+}
 
 @NgModule({
     bootstrap: [
@@ -38,7 +43,12 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
         AppRoutingModule,
         NativeScriptFormsModule,
         NativeScriptHttpModule,
-        DropDownModule
+        DropDownModule,
+        TranslateModule.forRoot({
+            provide: TranslateLoader,
+            useFactory: (createTranslateLoader),
+            deps: [Http]
+        })
     ],
     declarations: [
         AppComponent,

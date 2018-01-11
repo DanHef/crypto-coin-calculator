@@ -1,23 +1,23 @@
 <StackLayout class="page form p-15">
-    <Label class="label font-weight-bold m-b-10" text="Platform:"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formPlatform' | translate }}"></Label>
     <DropDown #dd [items]="platformList" [hint]="hint" [selectedIndex]="selectedIndexPlatformList" (selectedIndexChanged)="onPlatformChange($event)"
         style="margin-top: 5px; margin-bottom: 25px"></DropDown>
     <!--<TextField class="input input-rounded m-b-10" [(ngModel)]="portfolio"></TextField>-->
 
-    <Label class="label font-weight-bold m-b-10" text="Symbol:"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formSymbol' | translate }}"></Label>
     <DropDown #ddSymbols [items]="currencySymbolList" [selectedIndex]="selectedIndexCurrencySymbol" hint="Currency Code From"
     (selectedIndexChanged)="onCurrencySymbolChange($event)" style="margin-top: 5px; margin-bottom: 25px"></DropDown>
 
     <!--<TextField class="input input-rounded m-b-10" [(ngModel)]="symbol"></TextField>-->
 
-    <Label class="label font-weight-bold m-b-10" text="Portfolio Item Technical Name:"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formPortfolioItemTechnicalName' | translate }}"></Label>
     <TextField class="input input-rounded m-b-10" [(ngModel)]="technicalName"></TextField>
 
-    <Label class="label font-weight-bold m-b-10" text="Portfolio Item Description:"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formDescription' | translate }}"></Label>
     <TextField class="input input-rounded m-b-10" [(ngModel)]="description"></TextField>
 
-    <Label class="label font-weight-bold m-b-10" text="Quantity:"></Label>
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formQuantity' | translate }}"></Label>
     <TextField class="input input-rounded m-b-10" [(ngModel)]="quantity"></TextField>
 
-    <Button class="btn btn-primary" (tap)="onCreatePortfolioItem()" text="Create"></Button>
+    <Button class="btn btn-primary" (tap)="onCreatePortfolioItem()" text="{{ 'formButtonCreate' | translate }}"></Button>
 </StackLayout>

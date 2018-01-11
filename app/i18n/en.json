@@ -1,0 +1,23 @@
+{ 
+    "CoinCalculatorTitle": "CryptoCoin Calculator",
+    "tabCalculations": "Calculations",
+    "textNoCalcFieldsDefined": "No Calculations defined",
+    "tabPortfolio": "Portfolio",
+    "textNoPortfolioData": "No Portfolio Data available",
+    "tabPriceInfo": "Price Information",
+    "textNoPricesBitstamp": "No Data for Bitstamp available",
+    "textNoPricesBitfinex": "No Data for Bitfinex available",
+
+    "formPlatform": "Platform",
+    "formSourcePortfolioName": "Source Portfolio",
+    "formTargetCurrency": "Target Currency",
+    "formDescription": "Description",
+    "formButtonCreate": "Create",
+
+    "formCurrencyCodeFrom": "Source Currency Code",
+    "formCurrencyCodeTo": "Target Currency Code",
+
+    "formSymbol": "Currency Symbol",
+    "formPortfolioItemTechnicalName": "Reference name for portfolio item",
+    "formQuantity": "Quantity"
+}

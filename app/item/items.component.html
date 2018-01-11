@@ -11,7 +11,7 @@ The ActionBar is the NativeScript common abstraction over the Android ActionBar 
 http://docs.nativescript.org/ui/action-bar
 -->
 
-<ActionBar style="margin-top: 50px;" title="Coin Calculator" class="action-bar">
+<ActionBar style="margin-top: 50px;" title="{{ 'CoinCalculatorTitle' | translate }}" class="action-bar">
     <ActionItem ios.position="right" ios.systemIcon="4" (tap)="createPressed()" [visible]="createButtonVisible"></ActionItem>
 </ActionBar>
 
@@ -45,7 +45,7 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
         </StackLayout>
     </ng-template>-->
 
-    <ng-template tabItem title="Calculation Results">
+    <ng-template tabItem title="{{ 'tabCalculations' | translate }}">
         <StackLayout>
             <PullToRefresh (refresh)="onRefreshTriggered($event)">
                 <ScrollView>
@@ -63,7 +63,7 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                                 <TextField row="1" colSpan="3" isEnabled="false" class="input right" [text]="calcResult.result"></TextField>
                             </GridLayout>
                         </StackLayout>
-                        <Label *ngIf="calcResultsPortfolios.length == 0" text="No Calculation Fields defined"></Label>
+                        <Label *ngIf="calcResultsPortfolios.length == 0" text="{{ 'textNoCalcFieldsDefined' | translate }}"></Label>
                     </StackLayout>
                 </ScrollView>
             </PullToRefresh>
@@ -71,12 +71,12 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
     </ng-template>
 
 
-    <ng-template tabItem title="Portfolio">
+    <ng-template tabItem title="{{ 'tabPortfolio' | translate }}">
         <StackLayout>
             <PullToRefresh (refresh)="onRefreshTriggered($event)">
                 <ScrollView>
                     <StackLayout class="page form p-15">
-                        <Label text="No Data Available" *ngIf="coinPortfolio.length == 0"></Label>
+                        <Label text="{{ 'textNoPortfolioData' | translate }}" *ngIf="coinPortfolio.length == 0"></Label>
                         <StackLayout *ngFor="let portfolioItem of coinPortfolio">
                             <GridLayout columns="*,2*" rows="*,auto">
                                 <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="portfolioItem.portfolioItemDescription"></Label>
@@ -93,7 +93,7 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
     </ng-template>
 
 
-    <ng-template tabItem title="Price Information">
+    <ng-template tabItem title="{{ 'tabPriceInfo' | translate }}">
         <StackLayout>
             <PullToRefresh (refresh)="onRefreshTriggered($event)">
                 <ScrollView>
@@ -107,7 +107,7 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                                 <TextField row="1" colSpan="2" class="input right" isEnabled="false" [text]="price.price"></TextField>
                             </GridLayout>
                         </StackLayout>
-                        <Label *ngIf="currencyPricesBitstamp.length == 0" text="No Data for Bitstamp"></Label>
+                        <Label *ngIf="currencyPricesBitstamp.length == 0" text="{{ 'textNoPricesBitstamp' | translate }}"></Label>
 
                         <Label style="margin-top: 40px; margin-bottom: 10px" class="label font-weight-bold m-b-10" text="Bitfinex"></Label>
                         <StackLayout *ngFor="let priceBitfinex of currencyPricesBitfinex">
@@ -118,7 +118,7 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                                 <TextField row="1" colSpan="2" class="input right" isEnabled="false" [text]="priceBitfinex.price"></TextField>
                             </GridLayout>
                         </StackLayout>
-                        <Label *ngIf="currencyPricesBitfinex.length == 0" text="No Data for Bitfinex"></Label>
+                        <Label *ngIf="currencyPricesBitfinex.length == 0" text="{{ 'textNoPricesBitfinex' | translate }}"></Label>
                     </StackLayout>
                 </ScrollView>
             </PullToRefresh>
