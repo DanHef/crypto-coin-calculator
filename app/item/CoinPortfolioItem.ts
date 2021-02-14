@@ -4,6 +4,7 @@ export class CoinPortfolioItem {
     private portfolioItemDescription: string;
     private quantity: number;
     private symbol: string;
+    private sortOrderNumber: number;
 
     constructor(platform, portfolioItemName, portfolioItemDescription, symbol, quantity?) {
         this.platform = platform.toLowerCase();
@@ -56,5 +57,13 @@ export class CoinPortfolioItem {
 
     getSymbol():string {
         return this.symbol;
+    }
+
+    setSortOrderNumber(sortOrderNumber: number) {
+        this.sortOrderNumber = sortOrderNumber;
+    }
+
+    getSortOrderNumber() {
+        return this.sortOrderNumber;
     }
 }

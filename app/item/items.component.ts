@@ -189,15 +189,15 @@ export class ItemsComponent implements OnInit, AfterViewInit {
 
     createPressed() {
         switch(this.tabSelectedIndex) {
-            case 0:
+            case 2:
                 //calculation field should be created
                 this.router.navigate(["/createCalculationResult"]);
                 break;
-            case 1: 
+            case 0: 
                 //portfolio item should be created
                 this.router.navigate(["/createPortfolioItem"]);
                 break;
-            case 2: 
+            case 1: 
                 //currency price should be created
                 this.router.navigate(["/createCurrencyPrice"]); 
                 break;
@@ -246,7 +246,7 @@ export class ItemsComponent implements OnInit, AfterViewInit {
                 size: Admob.AD_SIZE.SMART_BANNER,
                 iosBannerId: this.iosBannerId,
                 //androidBannerId: this.androidBannerId,
-                iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB", "dee881b78c67c6420ac3cb41add46a94"],
+                iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB", "dee881b78c67c6420ac3cb41add46a94","6c11a0316df587310c7efff247137d4d46057644"],
                 margins: {
                     bottom: 0
                 }
@@ -264,12 +264,16 @@ export class ItemsComponent implements OnInit, AfterViewInit {
                 testing: true,
                 iosInterstitialId: this.iosInterstitialId,
                 //androidInterstitialId: this.androidInterstitialId,
-                iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB", "dee881b78c67c6420ac3cb41add46a94"]
+                iosTestDeviceIds: ["9FE3C4E8-C7DB-40EB-BCCD-84A43050EEAB", "dee881b78c67c6420ac3cb41add46a94", "6c11a0316df587310c7efff247137d4d46057644"]
             }).then(function () {
                 console.log("admob createInterstitial done");
             }, function (error) {
                 console.log("admob createInterstitial error: " + error);
             });
         }.bind(this), 0);
+    }
+
+    sortPortfolio(item, otherItem) {
+        this.portfolioItemService.savePortfolio();
     }
 }

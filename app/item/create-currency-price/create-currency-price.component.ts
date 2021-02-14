@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { RouterExtensions } from "nativescript-angular/router";
 
 import { ValueList } from "nativescript-drop-down";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     selector: "create-currency-price",
@@ -33,8 +34,9 @@ export class CreateCurrencyPriceComponent implements OnInit {
 
 
     constructor(private readonly currencyPriceService: CurrencyPriceService,
-        private readonly router: Router,
-        private readonly routerExtension: RouterExtensions) { }
+                private readonly router: Router,
+                private readonly routerExtension: RouterExtensions,
+                private readonly translateService: TranslateService) { }
 
     ngOnInit() {
         this.fillSymbolsList("bitstamp");
@@ -45,7 +47,9 @@ export class CreateCurrencyPriceComponent implements OnInit {
             !this.codeFrom ||
             !this.codeTo ||
             !this.platform) {
-            alert("Bitte alle Felder ausfüllen");
+                this.translateService.get("errorFillInAllFields").subscribe((translatedText) => {
+                    alert(translatedText);
+                });
         } else {
             this.currencyPriceService.createCurrencyPrice(this.codeFrom, this.codeTo, this.description, this.platform);
 

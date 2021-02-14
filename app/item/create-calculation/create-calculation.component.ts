@@ -10,6 +10,8 @@ import { ValueList } from "nativescript-drop-down";
 import { PortfolioItemService } from "../services/portfolio-item.service";
 import { CurrencyPriceService } from "../services/currency-price.service";
 
+import { TranslateService } from "@ngx-translate/core";
+
 @Component({
     selector: "create-calculation",
     moduleId: module.id,
@@ -39,7 +41,8 @@ export class CreateCalculationComponent implements OnInit {
                 private readonly router: Router,
                 private readonly routerExtension: RouterExtensions,
                 private readonly portfolioItemService: PortfolioItemService,
-                private readonly currencyPriceService: CurrencyPriceService) { 
+                private readonly currencyPriceService: CurrencyPriceService,
+                private readonly translateService: TranslateService) { 
         
     }
 
@@ -55,7 +58,9 @@ export class CreateCalculationComponent implements OnInit {
             !this.description ||
             !this.targetCurrencySymbol ||
             !this.sourcePortfolioItemName) {
-            alert("Bitte alle Felder ausfüllen");
+                this.translateService.get("errorFillInAllFields").subscribe((translatedText) => {
+                    alert(translatedText);
+                });
         } else {
             this.calculationService.createCalculationResult(this.sourcePortfolioItemName.toLowerCase(), this.targetCurrencySymbol.toLowerCase(), this.description, this.platform.toLowerCase());
             

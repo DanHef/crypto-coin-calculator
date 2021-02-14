@@ -7,6 +7,8 @@ import { PortfolioItemService } from "./portfolio-item.service";
 import { CurrencyPriceService } from "./currency-price.service";
 import { ItemService } from "../item.service";
 
+import {CurrencyPrice } from "../CurrencyPrice";
+
 
 @Injectable()
 export class CalculationService {
@@ -90,25 +92,44 @@ export class CalculationService {
 
     private determineFastestCurrencyPrice(sourceSymbol: string, targetSymbol: string, platform: string): Promise<number> {
         return new Promise<number>(function(resolve, reject) {
-            //currently always go through BTC
-            let currencyPriceBTC = this.currencyPriceService.getCurrencyPrice(sourceSymbol, "btc", platform);
-            var promisePriceBTC;
-            var promisePriceBTCTarget;
+            let currencyPriceBTC;
+            if(sourceSymbol !== "btc") {
+                //currently always go through BTC
+                currencyPriceBTC = this.currencyPriceService.getCurrencyPrice(sourceSymbol, "btc", platform);
+                var promisePriceBTC;
+                var promisePriceBTCTarget;
 
-            //load data from platform for this path
-            if (platform === "bitfinex") {
-                promisePriceBTC = this.itemService.loadDataFromBitfinexWithSymbol(currencyPriceBTC);
-            } else if (platform === "bitstamp") {
-                promisePriceBTC = this.itemService.loadDataFromBitstampWithSymbol(currencyPriceBTC);
+                //load data from platform for this path
+                if (platform === "bitfinex") {
+                    promisePriceBTC = this.itemService.loadDataFromBitfinexWithSymbol(currencyPriceBTC);
+                } else if (platform === "bitstamp") {
+                    promisePriceBTC = this.itemService.loadDataFromBitstampWithSymbol(currencyPriceBTC);
+                }
+            } else {
+                promisePriceBTC = new Promise((resolve, reject) => {
+                    currencyPriceBTC = new CurrencyPrice("btc", "btc", platform);
+                    currencyPriceBTC.setPrice(1);
+                    resolve(currencyPriceBTC);
+                });
             }
 
-            let currencyPriceBTCTarget = this.currencyPriceService.getCurrencyPrice("btc", targetSymbol, platform);
+            let currencyPriceBTCTarget;
+            
+            if(targetSymbol !== "btc") {
+                currencyPriceBTCTarget = this.currencyPriceService.getCurrencyPrice("btc", targetSymbol, platform);
 
             if (platform === "bitfinex") {
                 promisePriceBTCTarget = this.itemService.loadDataFromBitfinexWithSymbol(currencyPriceBTCTarget);
             } else if (platform === "bitstamp") {
                 promisePriceBTCTarget = this.itemService.loadDataFromBitstampWithSymbol(currencyPriceBTCTarget);
             }
+        } else {
+            promisePriceBTCTarget = new Promise((resolve, reject) => {
+                currencyPriceBTCTarget = new CurrencyPrice("btc", "btc", platform);
+                currencyPriceBTCTarget.setPrice(1);
+                resolve(currencyPriceBTCTarget);
+            });
+        }
 
             Promise.all([promisePriceBTC, promisePriceBTCTarget]).then(() => {
                 if (!currencyPriceBTC.price || !currencyPriceBTCTarget) {

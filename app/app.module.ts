@@ -6,7 +6,6 @@ import { AppComponent } from "./app.component";
 import { ItemService } from "./item/item.service";
 import { PortfolioItemService } from "./item/services/portfolio-item.service";
 import { ItemsComponent } from "./item/items.component";
-import { ItemDetailComponent } from "./item/item-detail.component";
 import { CreatePortfolioItemComponent } from "./item/create-portfolio-item/create-portfolio-item.component";
 import { CreateCurrencyPriceComponent } from "./item/create-currency-price/create-currency-price.component";
 import { CreateCalculationComponent } from "./item/create-calculation/create-calculation.component";
@@ -17,7 +16,6 @@ import { PlatformService } from "./item/services/platform.service";
 import { DropDownModule } from "nativescript-drop-down/angular";
 
 import * as elementRegistryModule from 'nativescript-angular/element-registry';
-import * as Admob from "nativescript-admob";
 
 import * as platformModule from "tns-core-modules/platform";
 
@@ -28,11 +26,13 @@ import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
 
 import { Http } from "@angular/http";
-import { TranslateModule, TranslateLoader, TranslateStaticLoader, TranslateService } from "ng2-translate";
+import { TranslateModule } from '@ngx-translate/core';
 
-export function createTranslateLoader(http: Http) {
+import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
+
+/*export function createTranslateLoader(http: Http) {
     return new TranslateStaticLoader(http, '/./i18n', '.json');
-}
+}*/
 
 @NgModule({
     bootstrap: [
@@ -44,16 +44,12 @@ export function createTranslateLoader(http: Http) {
         NativeScriptFormsModule,
         NativeScriptHttpModule,
         DropDownModule,
-        TranslateModule.forRoot({
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [Http]
-        })
+        NativeScriptUIListViewModule,
+        TranslateModule.forRoot()
     ],
     declarations: [
         AppComponent,
         ItemsComponent,
-        ItemDetailComponent,
         CreatePortfolioItemComponent,
         CreateCurrencyPriceComponent,
         CreateCalculationComponent

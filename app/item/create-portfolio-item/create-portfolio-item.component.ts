@@ -9,6 +9,7 @@ import { RouterExtensions } from "nativescript-angular/router";
 import { ValueList } from "nativescript-drop-down";
 
 import { CurrencyPriceService } from "../services/currency-price.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
     selector: "create-portfolio-item",
@@ -33,9 +34,10 @@ export class CreatePortfolioItemComponent implements OnInit {
     currencySymbolList: ValueList<string>;
 
     constructor(private readonly portfolioItemService: PortfolioItemService,
-        private readonly router: Router,
-        private readonly routerExtension: RouterExtensions,
-        private readonly currencyPriceService: CurrencyPriceService) { }
+                private readonly router: Router,
+                private readonly routerExtension: RouterExtensions,
+                private readonly currencyPriceService: CurrencyPriceService,
+                private readonly translateService: TranslateService) { }
 
     ngOnInit() {
         this.fillSymbolsList("bitstamp");
@@ -47,7 +49,9 @@ export class CreatePortfolioItemComponent implements OnInit {
             !this.symbol ||
             !this.quantity ||
             !this.technicalName) {
-            alert("Bitte alle Felder ausfüllen");
+                this.translateService.get("errorFillInAllFields").subscribe((translatedText) => {
+                    alert(translatedText);
+                });
         } else {
             this.portfolioItemService.createPortfolioItem(this.technicalName, this.description,
                 this.quantity, this.portfolio, this.symbol);

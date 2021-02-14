@@ -45,34 +45,26 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
         </StackLayout>
     </ng-template>-->
 
-    <ng-template tabItem title="{{ 'tabCalculations' | translate }}">
-        <StackLayout>
-            <PullToRefresh (refresh)="onRefreshTriggered($event)">
-                <ScrollView>
-                    <StackLayout class="page form p-15">
-                        <!--<StackLayout>
-                            <Label text="" class="label font-weight-bold m-b-5"></Label>
-                            <TextField isEnabled="false" class="input input-rounded m-b-10" [text]="calcResultOverall"></TextField>
-                        </StackLayout>-->
-                        <StackLayout *ngFor="let calcResult of calcResultsPortfolios">
-                            <GridLayout columns="*,auto,auto" rows="*,*">
-                                <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="calcResult.description"></Label>
-                                <!--<Button row="0" col="1" text="Edit" style="text-align: right; margin-right: 10px;" (tap)="calcResultEdit(calcResult)"></Button>-->
-                                <Button row="0" col="2" text="Delete" style="text-align: right" (tap)="calcResultDelete(calcResult)"></Button>
-
-                                <TextField row="1" colSpan="3" isEnabled="false" class="input right" [text]="calcResult.result"></TextField>
-                            </GridLayout>
-                        </StackLayout>
-                        <Label *ngIf="calcResultsPortfolios.length == 0" text="{{ 'textNoCalcFieldsDefined' | translate }}"></Label>
-                    </StackLayout>
-                </ScrollView>
-            </PullToRefresh>
-        </StackLayout>
-    </ng-template>
-
-
     <ng-template tabItem title="{{ 'tabPortfolio' | translate }}">
-        <StackLayout>
+        <Label text="{{ 'textNoPortfolioData' | translate }}" *ngIf="coinPortfolio.length == 0"></Label>
+        
+        <RadListView row="1" [items]="coinPortfolio" itemReorder="true" (itemReordered)="sortPortfolio($event)"
+                        pullToRefresh="true" (pullToRefreshInitiated)="onRefreshTriggered($event)">
+            <ng-template let-item="item">
+                <StackLayout class="page form p-15">
+                    <GridLayout columns="*,auto" rows="*,auto">
+                        <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="item.portfolioItemDescription"></Label>
+                        <Button row="0" col="1" style="text-align: right" text="Delete" (tap)="portfolioItemDelete(item)"></Button>
+
+                        <TextField row="1" colSpan="2" class="input input-rounded m-b-10" (ngModelChange)="onPortfolioItemQuantityChange($event, item)"
+                            [ngModel]="item.quantity"></TextField>
+                    </GridLayout>
+                </StackLayout>
+            </ng-template>
+        </RadListView>
+
+
+        <!--<StackLayout>
             <PullToRefresh (refresh)="onRefreshTriggered($event)">
                 <ScrollView>
                     <StackLayout class="page form p-15">
@@ -89,7 +81,7 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                     </StackLayout>
                 </ScrollView>
             </PullToRefresh>
-        </StackLayout>
+        </StackLayout>-->
     </ng-template>
 
 
@@ -99,26 +91,89 @@ class names available for styling your app at https://docs.nativescript.org/ui/t
                 <ScrollView>
                     <StackLayout class="page form p-15">
                         <Label style="margin-bottom: 10px" class="label font-weight-bold m-b-10" text="Bitstamp"></Label>
-                        <StackLayout *ngFor="let price of currencyPricesBitstamp">
+                        <RadListView row="1" [items]="currencyPricesBitstamp">
+                            <ng-template let-item="item">
+                                <StackLayout class="page form p-15">
+                                    <GridLayout columns="*,auto" rows="*,auto">
+                                        <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="item.currencyPriceDescription"></Label>
+                                        <Button row="0" col="1" style="text-align: right" text="Delete" (tap)="currencyPriceDelete(item)"></Button>
+                
+                                        <TextField row="1" colSpan="2" class="input right" isEnabled="false" [text]="item.price"></TextField>
+                                    </GridLayout>
+                                </StackLayout>
+                            </ng-template>
+                        </RadListView>
+                        
+                        <!--<StackLayout *ngFor="let price of currencyPricesBitstamp">
                             <GridLayout columns="*,2*" rows="*,*">
                                 <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="price.currencyPriceDescription"></Label>
                                 <Button row="0" col="1" style="text-align: right" text="Delete" (tap)="currencyPriceDelete(price)"></Button>
 
                                 <TextField row="1" colSpan="2" class="input right" isEnabled="false" [text]="price.price"></TextField>
                             </GridLayout>
-                        </StackLayout>
+                        </StackLayout>-->
                         <Label *ngIf="currencyPricesBitstamp.length == 0" text="{{ 'textNoPricesBitstamp' | translate }}"></Label>
 
                         <Label style="margin-top: 40px; margin-bottom: 10px" class="label font-weight-bold m-b-10" text="Bitfinex"></Label>
-                        <StackLayout *ngFor="let priceBitfinex of currencyPricesBitfinex">
+                        <RadListView row="1" [items]="currencyPricesBitfinex">
+                            <ng-template let-item="item">
+                                <StackLayout class="page form p-15">
+                                    <GridLayout columns="*,auto" rows="*,auto">
+                                        <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="item.currencyPriceDescription"></Label>
+                                        <Button row="0" col="1" style="text-align: right" text="Delete" (tap)="currencyPriceDelete(item)"></Button>
+                
+                                        <TextField row="1" colSpan="2" class="input right" isEnabled="false" [text]="item.price"></TextField>
+                                    </GridLayout>
+                                </StackLayout>
+                            </ng-template>
+                        </RadListView>
+                        
+                        <!--<StackLayout *ngFor="let priceBitfinex of currencyPricesBitfinex">
                             <GridLayout columns="*,2*" rows="*,*">
                                 <Label class="label font-weight-bold m-b-5" [text]="priceBitfinex.currencyPriceDescription"></Label>
                                 <Button row="0" col="1" style="text-align: right" text="Delete" (tap)="currencyPriceDelete(priceBitfinex)"></Button>
 
                                 <TextField row="1" colSpan="2" class="input right" isEnabled="false" [text]="priceBitfinex.price"></TextField>
                             </GridLayout>
-                        </StackLayout>
+                        </StackLayout>-->
                         <Label *ngIf="currencyPricesBitfinex.length == 0" text="{{ 'textNoPricesBitfinex' | translate }}"></Label>
+                    </StackLayout>
+                </ScrollView>
+            </PullToRefresh>
+        </StackLayout>
+    </ng-template>
+
+    <ng-template tabItem title="{{ 'tabCalculations' | translate }}">
+        <StackLayout>
+            <PullToRefresh (refresh)="onRefreshTriggered($event)">
+                <ScrollView>
+                    <StackLayout class="page form p-15">
+                        <!--<StackLayout>
+                            <Label text="" class="label font-weight-bold m-b-5"></Label>
+                            <TextField isEnabled="false" class="input input-rounded m-b-10" [text]="calcResultOverall"></TextField>
+                        </StackLayout>-->
+                        <RadListView row="1" [items]="calcResultsPortfolios">
+                            <ng-template let-item="item">
+                                <StackLayout class="page form p-15">
+                                    <GridLayout columns="*,auto" rows="*,auto">
+                                        <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="item.description"></Label>
+                                        <Button row="0" col="1" style="text-align: right" text="Delete" (tap)="calcResultDelete(item)"></Button>
+                
+                                        <TextField row="1" colSpan="3" class="input right" isEnabled="false" [text]="item.result"></TextField>
+                                    </GridLayout>
+                                </StackLayout>
+                            </ng-template>
+                        </RadListView>
+                        
+                        <!--<StackLayout *ngFor="let calcResult of calcResultsPortfolios">
+                            <GridLayout columns="*,auto,auto" rows="*,*">
+                                <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="calcResult.description"></Label>
+                                <Button row="0" col="2" text="Delete" style="text-align: right" (tap)="calcResultDelete(calcResult)"></Button>
+
+                                <TextField row="1" colSpan="3" isEnabled="false" class="input right" [text]="calcResult.result"></TextField>
+                            </GridLayout>
+                        </StackLayout>-->
+                        <Label *ngIf="calcResultsPortfolios.length == 0" text="{{ 'textNoCalcFieldsDefined' | translate }}"></Label>
                     </StackLayout>
                 </ScrollView>
             </PullToRefresh>

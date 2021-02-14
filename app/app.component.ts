@@ -1,9 +1,8 @@
 import { Component } from "@angular/core";
-import * as Admob from "nativescript-admob";
 import * as Platform from "platform";
 
 import { registerElement } from "nativescript-angular/element-registry";
-import { TranslateService } from "ng2-translate";
+import { TranslateService } from "@ngx-translate/core";
 registerElement("PullToRefresh", () => require("nativescript-pulltorefresh").PullToRefresh);
 
 @Component({

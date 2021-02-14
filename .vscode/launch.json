@@ -5,22 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch on iOS",
+            "name": "Launch on iOS in Simulator Xs",
             "type": "nativescript",
             "request": "launch",
             "platform": "ios",
             "appRoot": "${workspaceRoot}",
             "sourceMaps": true,
-            "watch": true
+            "watch": false,
+            "sourceMapPathOverrides": {
+                "webpack:///*": "${workspaceRoot}/app/*"
+            },
+            "tnsArgs": ["--device 725D6E1D-037C-4013-AEFC-A914355A32EA"]
         },
         {
-            "name": "Launch on iOS",
+            "name": "Launch on iOS on device",
             "type": "nativescript",
             "request": "launch",
             "platform": "ios",
             "appRoot": "${workspaceRoot}",
             "sourceMaps": true,
-            "watch": true
+            "watch": false,
+            "sourceMapPathOverrides": {
+                "webpack:///*": "${workspaceRoot}/app/*"
+            },
+            "tnsArgs": ["--device 6c11a0316df587310c7efff247137d4d46057644"]
         },
         {
             "name": "Attach on iOS",
@@ -29,7 +37,10 @@
             "platform": "ios",
             "appRoot": "${workspaceRoot}",
             "sourceMaps": true,
-            "watch": false
+            "watch": false,
+            "sourceMapPathOverrides": {
+                "webpack:///*": "${workspaceRoot}/app/*"
+            }
         },
         {
             "name": "Launch on Android",
@@ -38,7 +49,10 @@
             "platform": "android",
             "appRoot": "${workspaceRoot}",
             "sourceMaps": true,
-            "watch": true
+            "watch": true,
+            "sourceMapPathOverrides": {
+                "webpack:///*": "${workspaceRoot}/app/*"
+            }
         },
         {
             "name": "Attach on Android",
@@ -47,7 +61,10 @@
             "platform": "android",
             "appRoot": "${workspaceRoot}",
             "sourceMaps": true,
-            "watch": false
+            "watch": false,
+            "sourceMapPathOverrides": {
+                "webpack:///*": "${workspaceRoot}/app/*"
+            }
         }
     ]
 }

@@ -19,5 +19,7 @@
 
     "formSymbol": "Währungssymbol",
     "formPortfolioItemTechnicalName": "Referenzname Portfolioeintrag",
-    "formQuantity": "Menge"
+    "formQuantity": "Menge",
+
+    "errorFillInAllFields": "Bitte alle Felder ausfüllen!"
 }

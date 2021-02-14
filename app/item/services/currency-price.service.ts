@@ -142,6 +142,8 @@ export class CurrencyPriceService {
                 let storedPriceInformationString = this.secureStorage.getSync({
                     key: "cryptoCoinCalcPriceInformationData",
                 });
+
+                console.log("Currency Price Information:" + storedPriceInformationString);
         
                 if (storedPriceInformationString) {
                     let storedPriceInformations = JSON.parse(storedPriceInformationString);
@@ -156,9 +158,12 @@ export class CurrencyPriceService {
                         if(!currencyPrice) {
                             //should not happen because then the server does not support this pair
                             console.log("Stored Symbol Pair does not exist in server API");
+                            console.log("Currency Code From: " + storedPriceInformation.currencyCodeFrom);
+                            console.log("Currency Code To: " + storedPriceInformation.currencyCodeTo);
+                            console.log("Platform: " + storedPriceInformation.platform);
+                        } else {
+                            currencyPrice.setDescription(storedPriceInformation.currencyPriceDescription);
                         }
-                        currencyPrice.setDescription(storedPriceInformation.currencyPriceDescription);
-
                     }
                 }
 
