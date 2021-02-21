@@ -6,12 +6,12 @@
     "defaultCollection": "@nativescript/schematics"
   },
   "projects": {
-    "hello-world": {
+    "crypto-coin-calculator": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "ns"
     }
   },
-  "defaultProject": "hello-world"
+  "defaultProject": "crypto-coin-calculator"
 }
