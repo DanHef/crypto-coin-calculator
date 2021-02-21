@@ -1,0 +1,3 @@
+# Crypto Coin Calculator
+
+This project originated in 2018 from the first big hype around bitcoin and crypto currencies. From a first personal-only need to have an overview of the current value of the portfolio across currencies and trading platforms, this tool was developed to help with that without over-complicating things with trading features or server-side storage to worry about leaks. The Crypto Coin Calculator simply does what the name indicates: calculating on mobile devices (iOS and Android) the current value of crypto currencies in your preferred FIAT currency.
