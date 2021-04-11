@@ -9,12 +9,20 @@ import { ICryptoPortfolioItem } from './crypto-portfolio-item';
 export class CryptoPortfolioComponent implements OnInit {
     cryptoPortfolioItems: Array<ICryptoPortfolioItem> = [{
         id: 1,
+        name: "",
         description: "Description1",
-        quantity: 1
+        quantity: 1,
+        platform: "",
+        symbol: "",
+        sortOrderNumber: 0
     },{
         id: 2,
+        name: "",
         description: "Description2",
-        quantity: 2
+        quantity: 2,
+        platform: "",
+        symbol: "",
+        sortOrderNumber: 0
     }];
 
     constructor() { }
