@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ICryptoPortfolioItem } from './crypto-portfolio-item';
+import { CryptoPortfolioService } from './crypto-portfolio.service';
 
 @Component({
     selector: 'crypto-portfolio',
@@ -7,45 +8,25 @@ import { ICryptoPortfolioItem } from './crypto-portfolio-item';
     styleUrls: ['./crypto-portfolio.component.css']
 })
 export class CryptoPortfolioComponent implements OnInit {
-    cryptoPortfolioItems: Array<ICryptoPortfolioItem> = [{
-        id: 1,
-        name: "",
-        description: "Description1",
-        quantity: 1,
-        platform: "",
-        symbol: "",
-        sortOrderNumber: 0
-    },{
-        id: 2,
-        name: "",
-        description: "Description2",
-        quantity: 2,
-        platform: "",
-        symbol: "",
-        sortOrderNumber: 0
-    }];
+    cryptoPortfolioItems: Array<ICryptoPortfolioItem> | undefined;
 
-    constructor() { }
+    constructor(private readonly cryptoPortfolioService: CryptoPortfolioService) { }
 
     ngOnInit(): void {
+        this.cryptoPortfolioItems = this.cryptoPortfolioService.getPortfolioItems();
     }
 
     public onItemDeleted(itemId: number) {
+        this.cryptoPortfolioItems = this.cryptoPortfolioService.deletePortfolioItem(itemId);
+
         console.log(`Crypto Portfolio Item deleted (ID: ${itemId})`);
-        this.cryptoPortfolioItems.splice(this.cryptoPortfolioItems.findIndex((item) => {
-            return item.id === itemId;
-        }),1);
     }
 
     public onItemQuantityChanged(itemChanged) {
-        console.log(itemChanged);
-        for(let i=0; i<this.cryptoPortfolioItems.length; i++) {
-            if(this.cryptoPortfolioItems[i].id === itemChanged.id) {
+        for (let i = 0; i < this.cryptoPortfolioItems.length; i++) {
+            if (this.cryptoPortfolioItems[i].id === itemChanged.id) {
                 this.cryptoPortfolioItems[i].quantity = itemChanged.quantity;
             }
         }
-
-        console.log(`Result: ${JSON.stringify(this.cryptoPortfolioItems)}`);
     }
-
 }
