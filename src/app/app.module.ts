@@ -3,10 +3,11 @@ import { NativeScriptModule } from "@nativescript/angular";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { ItemsComponent } from "./item/items.component";
-import { ItemDetailComponent } from "./item/item-detail.component";
 import { HomeComponent } from "./home/home.component";
-import { CryptoPortfolioComponent } from "./crypto-portfolio/crypto-portfolio.component";
+
+import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
+
+import { CryptoPortfolioModule } from "./crypto-portfolio/crypto-portfolio.module";
 
 @NgModule({
     bootstrap: [
@@ -14,14 +15,13 @@ import { CryptoPortfolioComponent } from "./crypto-portfolio/crypto-portfolio.co
     ],
     imports: [
         NativeScriptModule,
-        AppRoutingModule
+        AppRoutingModule,
+        NativeScriptUIListViewModule,
+        CryptoPortfolioModule
     ],
     declarations: [
         AppComponent,
-        ItemsComponent,
-        ItemDetailComponent,
-        HomeComponent,
-        CryptoPortfolioComponent
+        HomeComponent
     ],
     providers: [],
     schemas: [

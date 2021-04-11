@@ -1,1 +1,7 @@
-<Button text="crypto-portfolio works!" class="btn btn-primary"></Button>
+<RadListView [items]="cryptoPortfolioItems">
+    <ng-template tkListItemTemplate let-item="item">
+        <crypto-portfolio-item [cryptoPortfolioItem]="item"
+                                (deleted)="onItemDeleted($event)"
+                                (quantityChanged)="onItemQuantityChanged($event)"></crypto-portfolio-item>
+    </ng-template>
+</RadListView>

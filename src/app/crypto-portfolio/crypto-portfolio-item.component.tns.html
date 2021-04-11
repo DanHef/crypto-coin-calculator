@@ -1,0 +1,8 @@
+<GridLayout columns="*,auto" rows="*,auto">
+    <Label row="0" col="0" class="label font-weight-bold m-b-5" [text]="cryptoPortfolioItem.description"></Label>
+    <Button row="0" col="1" style="text-align: right" text="Delete" (tap)="onDelete()"></Button>
+
+    <TextField row="1" colSpan="2" class="input input-rounded m-b-10" 
+                [ngModel]="cryptoPortfolioItem.quantity"
+                (ngModelChange)="onQuantityChanged($event)"></TextField>
+</GridLayout>
