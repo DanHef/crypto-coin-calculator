@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ICryptoPortfolioItem } from './crypto-portfolio-item';
+import { ICryptoPortfolioItem } from './crypto-portfolio-item/crypto-portfolio-item';
 import { CryptoPortfolioService } from './crypto-portfolio.service';
 
 @Component({
@@ -8,12 +8,14 @@ import { CryptoPortfolioService } from './crypto-portfolio.service';
     styleUrls: ['./crypto-portfolio.component.css']
 })
 export class CryptoPortfolioComponent implements OnInit {
-    cryptoPortfolioItems: Array<ICryptoPortfolioItem> | undefined;
+    cryptoPortfolioItems: Array<ICryptoPortfolioItem>;
 
     constructor(private readonly cryptoPortfolioService: CryptoPortfolioService) { }
 
     ngOnInit(): void {
         this.cryptoPortfolioItems = this.cryptoPortfolioService.getPortfolioItems();
+
+        console.log(JSON.stringify(this.cryptoPortfolioItems));
     }
 
     public onItemDeleted(itemId: number) {

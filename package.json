@@ -30,6 +30,7 @@
     "@angular/router": "~11.0.0",
     "@nativescript/angular": "~11.0.0",
     "@nativescript/core": "~7.1.0",
+    "@nativescript/secure-storage": "^3.0.0",
     "@nativescript/theme": "~3.0.0",
     "@schematics/angular": "^9.1.8",
     "nativescript-iqkeyboardmanager": "^1.5.1",
