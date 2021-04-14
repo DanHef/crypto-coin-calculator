@@ -1,7 +1,10 @@
-<RadListView [items]="cryptoPortfolioItems">
-    <ng-template tkListItemTemplate let-item="item">
-        <crypto-portfolio-item [cryptoPortfolioItem]="item"
-                                (deleted)="onItemDeleted($event)"
-                                (quantityChanged)="onItemQuantityChanged($event)"></crypto-portfolio-item>
-    </ng-template>
-</RadListView>
+<StackLayout>
+    <ScrollView style="height: 100%;" orientation="vertical">
+        <StackLayout>
+            <StackLayout style="height: 400px;" *ngFor="let item of cryptoPortfolioItems$ | async">
+                <crypto-portfolio-item [cryptoPortfolioItem]="item" (deleted)="onItemDeleted(item)" (quantityChanged)="onItemChanged($event)">
+                </crypto-portfolio-item>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</StackLayout>

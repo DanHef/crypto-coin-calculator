@@ -1,10 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ICryptoPortfolioItem } from './crypto-portfolio-item';
+import { ICryptoPortfolioItemChanged } from './crypto-portfolio-item-changed';
 
-interface ICryptoPortfolioItemQuantityChanged {
-    id: number;
-    quantity: number;
-}
 
 @Component({
     selector: 'crypto-portfolio-item',
@@ -12,9 +9,18 @@ interface ICryptoPortfolioItemQuantityChanged {
     styleUrls: ['./crypto-portfolio-item.component.css']
 })
 export class CryptoPortfolioItemComponent implements OnInit {
+    private _cryptoPortfolioItem: ICryptoPortfolioItem;
+    quantity: number;
 
-    @Input() cryptoPortfolioItem: ICryptoPortfolioItem;
-    @Output() quantityChanged = new EventEmitter<ICryptoPortfolioItemQuantityChanged>();
+    @Input() set cryptoPortfolioItem(item: ICryptoPortfolioItem) {
+        this._cryptoPortfolioItem = item;
+        this.quantity = this._cryptoPortfolioItem.quantity;
+    };
+    get cryptoPortfolioItem() {
+        return this._cryptoPortfolioItem;
+    }
+
+    @Output() quantityChanged = new EventEmitter<ICryptoPortfolioItemChanged>();
     @Output() deleted = new EventEmitter<number>();
 
     constructor() { }
@@ -27,9 +33,10 @@ export class CryptoPortfolioItemComponent implements OnInit {
     }
 
     public onQuantityChanged(newQuantity): void {
-        console.log(`Portfolio Item Quantity Changed to: ${newQuantity} for item ${this.cryptoPortfolioItem.id}`);
-
-        this.cryptoPortfolioItem.quantity = newQuantity;
-        this.quantityChanged.emit({id: this.cryptoPortfolioItem.id, quantity: this.cryptoPortfolioItem.quantity} );
+        this.quantityChanged.emit({
+            id: this.cryptoPortfolioItem.id,
+            quantity: this.quantity,
+            item: this.cryptoPortfolioItem
+        });
     }
 }
