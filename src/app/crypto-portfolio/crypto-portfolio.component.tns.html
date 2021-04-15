@@ -1,10 +1,16 @@
-<StackLayout>
-    <ScrollView style="height: 100%;" orientation="vertical">
-        <StackLayout>
-            <StackLayout style="height: 400px;" *ngFor="let item of cryptoPortfolioItems$ | async">
-                <crypto-portfolio-item [cryptoPortfolioItem]="item" (deleted)="onItemDeleted(item)" (quantityChanged)="onItemChanged($event)">
-                </crypto-portfolio-item>
+<StackLayout *ngIf="(cryptoPortfolioItems$ | async) as cryptoPortfolioItems">
+    <StackLayout style="height: 80%;" *ngIf="cryptoPortfolioItems.length > 0">
+        <ScrollView style="height: 80%;" orientation="vertical">
+            <StackLayout>
+                <StackLayout style="height: 400px;" *ngFor="let item of cryptoPortfolioItems">
+                    <crypto-portfolio-item [cryptoPortfolioItem]="item" (deleted)="onItemDeleted(item)"
+                        (quantityChanged)="onItemChanged($event)">
+                    </crypto-portfolio-item>
+                </StackLayout>
             </StackLayout>
-        </StackLayout>
-    </ScrollView>
+        </ScrollView>
+    </StackLayout>
+    <StackLayout *ngIf="cryptoPortfolioItems.length == 0">
+        <Label text="Nichts da bisher"></Label>
+    </StackLayout>
 </StackLayout>

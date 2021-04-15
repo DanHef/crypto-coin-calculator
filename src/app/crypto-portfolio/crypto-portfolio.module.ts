@@ -2,13 +2,16 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CryptoPortfolioComponent } from './crypto-portfolio.component';
 import { CryptoPortfolioItemComponent } from './crypto-portfolio-item/crypto-portfolio-item.component';
+import { CreateCryptoPortfolioItemComponent } from './crypto-portfolio-item/create-crypto-portfolio-item/create-crypto-portfolio-item.component';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
-import { NativeScriptFormsModule } from "@nativescript/angular";
+import { NativeScriptFormsModule } from '@nativescript/angular';
+import { NativeScriptPickerModule } from "@nativescript/picker/angular";
 
 @NgModule({
     declarations: [
         CryptoPortfolioComponent,
-        CryptoPortfolioItemComponent
+        CryptoPortfolioItemComponent,
+        CreateCryptoPortfolioItemComponent
     ],
     exports: [
         CryptoPortfolioComponent
@@ -16,7 +19,8 @@ import { NativeScriptFormsModule } from "@nativescript/angular";
     imports: [
         CommonModule,
         NativeScriptUIListViewModule,
-        NativeScriptFormsModule
+        NativeScriptFormsModule,
+        NativeScriptPickerModule
     ],
     schemas: [
         NO_ERRORS_SCHEMA

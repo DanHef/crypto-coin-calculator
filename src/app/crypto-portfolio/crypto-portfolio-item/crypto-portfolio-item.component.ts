@@ -10,11 +10,11 @@ import { ICryptoPortfolioItemChanged } from './crypto-portfolio-item-changed';
 })
 export class CryptoPortfolioItemComponent implements OnInit {
     private _cryptoPortfolioItem: ICryptoPortfolioItem;
-    quantity: number;
+    quantity: string;
 
     @Input() set cryptoPortfolioItem(item: ICryptoPortfolioItem) {
         this._cryptoPortfolioItem = item;
-        this.quantity = this._cryptoPortfolioItem.quantity;
+        this.quantity = this._cryptoPortfolioItem.quantity.toString();
     };
     get cryptoPortfolioItem() {
         return this._cryptoPortfolioItem;
@@ -32,10 +32,10 @@ export class CryptoPortfolioItemComponent implements OnInit {
         this.deleted.emit(this.cryptoPortfolioItem.id);
     }
 
-    public onQuantityChanged(newQuantity): void {
+    public onQuantityChanged(): void {
         this.quantityChanged.emit({
             id: this.cryptoPortfolioItem.id,
-            quantity: this.quantity,
+            quantity: +this.quantity,
             item: this.cryptoPortfolioItem
         });
     }

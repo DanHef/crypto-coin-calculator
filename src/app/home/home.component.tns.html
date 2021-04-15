@@ -1,3 +1,7 @@
+<ActionBar style="margin-top: 50px;" title="Crypto Coin Calculator" class="action-bar">
+    <ActionItem ios.position="right" ios.systemIcon="4" (tap)="createPressed()"></ActionItem>
+</ActionBar>
+
 <BottomNavigation selectedIndex="0">
     <TabStrip>
         <TabStripItem>
@@ -16,7 +20,8 @@
 
     <TabContentItem>
         <GridLayout>
-            <crypto-portfolio></crypto-portfolio>
+            <router-outlet></router-outlet>
+            <!--<crypto-portfolio></crypto-portfolio>-->
         </GridLayout>
     </TabContentItem>
     <TabContentItem>

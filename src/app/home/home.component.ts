@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'crypto-home',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private readonly router: Router,
+              private readonly activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+  }
+
+
+  public createPressed() {
+    this.router.navigate(['create-crypto-portfolio-item'], { relativeTo: this.activatedRoute });
   }
 
 }
