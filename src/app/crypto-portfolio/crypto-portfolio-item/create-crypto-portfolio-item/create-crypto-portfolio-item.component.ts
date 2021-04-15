@@ -26,8 +26,6 @@ export class CreateCryptoPortfolioItemComponent implements OnInit {
   }
 
   public onPlatformSelectionChanged(event) {
-    /*let picker = <ListPicker>args.object;
-    console.log(`Selected: ${this.platforms[picker.selectedIndex]}`);*/
     this.selectedPlatform = event.value;
 
   }
@@ -52,6 +50,18 @@ export class CreateCryptoPortfolioItemComponent implements OnInit {
     } as ICryptoPortfolioItem);
 
     this.router.navigate([ 'crypto-home' ]);
+  }
+
+  public onCancel() {
+    this.initializeFields();
+    this.router.navigate([ 'crypto-home' ]);
+  }
+
+  private initializeFields() {
+    this.selectedPlatform = "";
+    this.description = "";
+    this.technicalName = "";
+    this.quantity = 0;
   }
 
 }

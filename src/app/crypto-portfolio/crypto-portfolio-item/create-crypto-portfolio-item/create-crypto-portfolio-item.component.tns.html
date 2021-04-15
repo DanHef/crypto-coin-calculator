@@ -1,6 +1,7 @@
 <StackLayout class="page form p-15">
     <Label class="label" text="Plattform"></Label>
-    <PickerField hint="Click here" [items]="platforms" (selectedValueChange)="onPlatformSelectionChanged($event)"></PickerField>
+    <PickerField hint="Click here" [items]="platforms" (selectedValueChange)="onPlatformSelectionChanged($event)">
+    </PickerField>
 
     <Label class="label" text="Technical Name"></Label>
     <TextField class="input m-b-10" [(ngModel)]="technicalName"></TextField>
@@ -10,6 +11,7 @@
 
     <Label class="label" text="Quantity"></Label>
     <TextField class="input m-b-10" [(ngModel)]="quantity"></TextField>
-</StackLayout>
 
-<Button text="Create" class="btn btn-primary" (tap)="onItemCreate()"></Button>
+    <Button text="Create" class="btn btn-primary" (tap)="onItemCreate()"></Button>
+    <Button text="Cancel" class="btn btn-primary" (tap)="onCancel()"></Button>
+</StackLayout>
