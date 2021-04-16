@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ICryptoPortfolioItem } from './crypto-portfolio-item/crypto-portfolio-item';
 import { SecureStorage } from '@nativescript/secure-storage';
 import { from, merge, Subject } from 'rxjs';
-import { map, scan, shareReplay, tap } from 'rxjs/operators';
+import { filter, map, scan, shareReplay, tap } from 'rxjs/operators';
 
 interface ItemCrudOperation {
     item: ICryptoPortfolioItem;
@@ -17,7 +17,7 @@ export class CryptoPortfolioService {
 
     public itemsFromStorage$ = from(this.storage.get({ key: 'cryptoPortfolioItems' })).pipe(
         map(storedItemString => JSON.parse(storedItemString)),
-        map(storedItemsJSON => storedItemsJSON.items as ICryptoPortfolioItem[]),
+        map(storedItemsJSON => storedItemsJSON && storedItemsJSON.items ? storedItemsJSON.items as ICryptoPortfolioItem[] : []),
         shareReplay(1),
         tap((items) => console.log("StoredItems Array: " + JSON.stringify(items)))
     );
@@ -31,12 +31,21 @@ export class CryptoPortfolioService {
     ).pipe(
         scan((items: ICryptoPortfolioItem[], crudItem: ItemCrudOperation) => this.handleCRUDOperations(items, crudItem)),
         shareReplay(1),
-        tap((items) => {
-            console.log("Saving Items: " + JSON.stringify(items));
+        map(cryptoPortfolioItems => {
+            if(cryptoPortfolioItems) {
+                for(let i = 0; i < cryptoPortfolioItems.length; i++) {
+                    cryptoPortfolioItems[i].id = i + 1;
+                }
+            }
+
+            return cryptoPortfolioItems;
+        }),
+        tap((cryptoPortfolioItems) => {
+            console.log("Saving Items: " + JSON.stringify(cryptoPortfolioItems));
             this.storage.set({
                 key: 'cryptoPortfolioItems',
                 value: JSON.stringify({
-                    "items": items
+                    "items": cryptoPortfolioItems
                 })
             });
         }),
