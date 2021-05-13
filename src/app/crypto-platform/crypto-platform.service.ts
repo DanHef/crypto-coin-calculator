@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, mergeMap, shareReplay } from 'rxjs/operators';
-import { combineLatest, forkJoin, Observable, of, Subject } from 'rxjs';
+import { map, mergeMap, scan, shareReplay, tap } from 'rxjs/operators';
+import { combineLatest, forkJoin, from, merge, Observable, of, Subject } from 'rxjs';
+import { SecureStorage } from '@nativescript/secure-storage';
 
 interface CurrencyTradingPairPrice {
     platform?: string;
@@ -64,10 +65,20 @@ enum CryptoPlatform {
     Bitfinex = 'bitfinex'
 }
 
+const STORAGE_KEY_DISPLAY_PRICES = 'cryptoPlatformDisplayPrices';
+
 @Injectable({
     providedIn: 'root'
 })
 export class CryptoPlatformService {
+    private storage = new SecureStorage();
+
+    public displayPricesFromStorage$ = from(this.storage.get({ key: STORAGE_KEY_DISPLAY_PRICES })).pipe(
+        map(storedDisplayPricesString => JSON.parse(storedDisplayPricesString)),
+        map(storedDisplayPricesJSON => storedDisplayPricesJSON && storedDisplayPricesJSON.displayPrices ? storedDisplayPricesJSON.displayPrices as CurrencyTradingPairPrice[] : []),
+        shareReplay(1),
+        tap((displayPrices) => console.log("Stored Display Prices Array: " + JSON.stringify(displayPrices)))
+    );
 
     private bitstampTradingPairs$ = this.http.get<BitstampTradingPairs[]>("https://www.bitstamp.net/api/v2/trading-pairs-info/").pipe(
         map((tradingPairs) => tradingPairs.filter((tradingPair) => tradingPair.trading === 'Enabled')),
@@ -114,13 +125,47 @@ export class CryptoPlatformService {
         })
     );
 
-
-    public tradingPairPrices$ = combineLatest([
+    private tradingPairsMixinDisplay$ = combineLatest([
         this.tradingPairs$,
-        this.tradingPairPriceCrudAction$
+        this.displayPricesFromStorage$,
     ]).pipe(
-        map(([tradingPairs, crudTradingPair]) => this.handleCRUDOperations(tradingPairs, crudTradingPair)),
+        map(([tradingPairs, displayPricesFromStorage]) => {
+            for (let displayPrice of displayPricesFromStorage) {
+                if (this.checkTradingPairExists(tradingPairs, displayPrice)) {
+                    tradingPairs = tradingPairs.map((tradingPair) => {
+                        if (displayPrice.platform === tradingPair.platform && displayPrice.currencyCodeFrom === tradingPair.currencyCodeFrom && displayPrice.currencyCodeTo === tradingPair.currencyCodeTo) {
+                            //just adjust display option of existing trading pair
+                            return { ...tradingPair, display: true };
+                        } else {
+                            return tradingPair;
+                        }
+                    });
+                } else {
+                    tradingPairs = [...tradingPairs, { ...displayPrice, display: true }];
+                }
+            }
+
+            return tradingPairs;
+        })
+    );
+
+
+    public tradingPairPrices$ = merge(
+        this.tradingPairsMixinDisplay$,
+        this.tradingPairPriceCrudAction$
+    ).pipe(
+        scan((tradingPairs: CurrencyTradingPairPrice[], crudTradingPair: CrudCurrencyTradingPairPrice) => this.handleCRUDOperations(tradingPairs, crudTradingPair)),
         shareReplay(1),
+        tap((tradingPairs) => {
+            const displayTradingPairs = tradingPairs.filter((tradingPair) => tradingPair.display === true);
+            console.log("Saving Items: " + JSON.stringify(displayTradingPairs));
+            this.storage.set({
+                key: STORAGE_KEY_DISPLAY_PRICES,
+                value: JSON.stringify({
+                    "displayPrices": displayTradingPairs
+                })
+            });
+        }),
         mergeMap((tradingPairs) => {
             const observables: Observable<CurrencyTradingPairPrice>[] = [];
             for (let i = 0; i < tradingPairs.length; i++) {
@@ -161,7 +206,7 @@ export class CryptoPlatformService {
                 } else {
                     return [...tradingPairs, { ...crudTradingPair, display: true }];
                 }
-                
+
             case CrudOperation.Changed:
                 return tradingPairs.map((tradingPair) => {
                     if (this.checkTradingPairExists(tradingPairs, tradingPair)) {
