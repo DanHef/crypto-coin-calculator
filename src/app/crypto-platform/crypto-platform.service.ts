@@ -3,8 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { map, mergeMap, scan, shareReplay, tap } from 'rxjs/operators';
 import { combineLatest, forkJoin, from, merge, Observable, of, Subject } from 'rxjs';
 import { SecureStorage } from '@nativescript/secure-storage';
+import { CryptoPlatform } from './crypto-platform.enum';
+import { CryptoPortfolioService } from '../crypto-portfolio/crypto-portfolio.service';
+import { ICryptoPortfolioItem } from '../crypto-portfolio/crypto-portfolio-item/crypto-portfolio-item';
 
-interface CurrencyTradingPairPrice {
+export interface CurrencyTradingPairPrice {
     platform?: string;
     description?: string;
     currencyCodeFrom?: string;
@@ -60,11 +63,6 @@ interface BitfinexCurrentPrices {
     timestamp: string;
 }
 
-enum CryptoPlatform {
-    Bitstamp = 'bitstamp',
-    Bitfinex = 'bitfinex'
-}
-
 const STORAGE_KEY_DISPLAY_PRICES = 'cryptoPlatformDisplayPrices';
 
 @Injectable({
@@ -73,11 +71,10 @@ const STORAGE_KEY_DISPLAY_PRICES = 'cryptoPlatformDisplayPrices';
 export class CryptoPlatformService {
     private storage = new SecureStorage();
 
-    public displayPricesFromStorage$ = from(this.storage.get({ key: STORAGE_KEY_DISPLAY_PRICES })).pipe(
+    private displayPricesFromStorage$ = from(this.storage.get({ key: STORAGE_KEY_DISPLAY_PRICES })).pipe(
         map(storedDisplayPricesString => JSON.parse(storedDisplayPricesString)),
         map(storedDisplayPricesJSON => storedDisplayPricesJSON && storedDisplayPricesJSON.displayPrices ? storedDisplayPricesJSON.displayPrices as CurrencyTradingPairPrice[] : []),
-        shareReplay(1),
-        tap((displayPrices) => console.log("Stored Display Prices Array: " + JSON.stringify(displayPrices)))
+        shareReplay(1)
     );
 
     private bitstampTradingPairs$ = this.http.get<BitstampTradingPairs[]>("https://www.bitstamp.net/api/v2/trading-pairs-info/").pipe(
@@ -127,7 +124,7 @@ export class CryptoPlatformService {
 
     private tradingPairsMixinDisplay$ = combineLatest([
         this.tradingPairs$,
-        this.displayPricesFromStorage$,
+        this.displayPricesFromStorage$
     ]).pipe(
         map(([tradingPairs, displayPricesFromStorage]) => {
             for (let displayPrice of displayPricesFromStorage) {
@@ -146,25 +143,59 @@ export class CryptoPlatformService {
             }
 
             return tradingPairs;
-        })
+        }),
+        shareReplay(1)
+    );
+
+    private tradingPairPricesMixinPortfolio$ = combineLatest([
+        this.tradingPairsMixinDisplay$,
+        this.portfolioService.items$
+    ]).pipe(
+        tap(() => console.log("Mixin Portfolio Items")),
+        map(([tradingPairs, portfolioItems]) => {
+            for (let portfolioItem of portfolioItems) {
+                const tradingPairFromPortfolioItem = {
+                    platform: portfolioItem.platform,
+                    currencyCodeFrom: portfolioItem.symbol,
+                    currencyCodeTo: 'eur',
+                    description: portfolioItem.description + ' to EUR',
+                } as CurrencyTradingPairPrice;
+
+                if (this.checkTradingPairExists(tradingPairs, tradingPairFromPortfolioItem)) {
+                    tradingPairs = tradingPairs.map((tradingPair) => {
+                        if (tradingPairFromPortfolioItem.platform === tradingPair.platform && tradingPairFromPortfolioItem.currencyCodeFrom === tradingPair.currencyCodeFrom && tradingPairFromPortfolioItem.currencyCodeTo === tradingPair.currencyCodeTo) {
+                            //just adjust display option of existing trading pair
+                            return { ...tradingPair, display: true };
+                        } else {
+                            return tradingPair;
+                        }
+                    });
+                } else {
+                    tradingPairs = [...tradingPairs, { ...tradingPairFromPortfolioItem, display: true }];
+                }
+            }
+
+            return tradingPairs;
+        }),
+        shareReplay(1)
     );
 
 
     public tradingPairPrices$ = merge(
-        this.tradingPairsMixinDisplay$,
+        this.tradingPairPricesMixinPortfolio$,
         this.tradingPairPriceCrudAction$
     ).pipe(
         scan((tradingPairs: CurrencyTradingPairPrice[], crudTradingPair: CrudCurrencyTradingPairPrice) => this.handleCRUDOperations(tradingPairs, crudTradingPair)),
         shareReplay(1),
         tap((tradingPairs) => {
-            const displayTradingPairs = tradingPairs.filter((tradingPair) => tradingPair.display === true);
+            /*const displayTradingPairs = tradingPairs.filter((tradingPair) => tradingPair.display === true);
             console.log("Saving Items: " + JSON.stringify(displayTradingPairs));
             this.storage.set({
                 key: STORAGE_KEY_DISPLAY_PRICES,
                 value: JSON.stringify({
                     "displayPrices": displayTradingPairs
                 })
-            });
+            });*/
         }),
         mergeMap((tradingPairs) => {
             const observables: Observable<CurrencyTradingPairPrice>[] = [];
@@ -180,7 +211,8 @@ export class CryptoPlatformService {
         })
     );
 
-    constructor(private readonly http: HttpClient) { }
+    constructor(private readonly http: HttpClient,
+        private readonly portfolioService: CryptoPortfolioService) { }
 
     public addDisplayTradingPair(platform: string, symbolFrom: string, symbolTo: string) {
         this.tradingPairPriceCrudSubject.next({
@@ -192,42 +224,44 @@ export class CryptoPlatformService {
     }
 
     private handleCRUDOperations(tradingPairs: CurrencyTradingPairPrice[], crudTradingPair: CrudCurrencyTradingPairPrice) {
-        switch (crudTradingPair.operation) {
-            case CrudOperation.Added:
-                if (this.checkTradingPairExists(tradingPairs, crudTradingPair)) {
+        if (!Array.isArray(crudTradingPair)) {
+            switch (crudTradingPair.operation) {
+                case CrudOperation.Added:
+                    if (this.checkTradingPairExists(tradingPairs, crudTradingPair)) {
+                        return tradingPairs.map((tradingPair) => {
+                            if (crudTradingPair.platform === tradingPair.platform && crudTradingPair.currencyCodeFrom === tradingPair.currencyCodeFrom && crudTradingPair.currencyCodeTo === tradingPair.currencyCodeTo) {
+                                //just adjust display option of existing trading pair
+                                return { ...tradingPair, display: true };
+                            } else {
+                                return tradingPair;
+                            }
+                        });
+                    } else {
+                        return [...tradingPairs, { ...crudTradingPair, display: true }];
+                    }
+
+                case CrudOperation.Changed:
                     return tradingPairs.map((tradingPair) => {
-                        if (crudTradingPair.platform === tradingPair.platform && crudTradingPair.currencyCodeFrom === tradingPair.currencyCodeFrom && crudTradingPair.currencyCodeTo === tradingPair.currencyCodeTo) {
-                            //just adjust display option of existing trading pair
+                        if (this.checkTradingPairExists(tradingPairs, tradingPair)) {
                             return { ...tradingPair, display: true };
+                        } else {
+                            return {
+                                ...crudTradingPair,
+                                display: true
+                            } as CurrencyTradingPairPrice;
+                        }
+                    });
+                case CrudOperation.Deleted:
+                    return tradingPairs.map((tradingPair) => {
+                        if (this.checkTradingPairExists(tradingPairs, tradingPair)) {
+                            return { ...tradingPair, display: false };
                         } else {
                             return tradingPair;
                         }
                     });
-                } else {
-                    return [...tradingPairs, { ...crudTradingPair, display: true }];
-                }
-
-            case CrudOperation.Changed:
-                return tradingPairs.map((tradingPair) => {
-                    if (this.checkTradingPairExists(tradingPairs, tradingPair)) {
-                        return { ...tradingPair, display: true };
-                    } else {
-                        return {
-                            ...crudTradingPair,
-                            display: true
-                        } as CurrencyTradingPairPrice;
-                    }
-                });
-            case CrudOperation.Deleted:
-                return tradingPairs.map((tradingPair) => {
-                    if (this.checkTradingPairExists(tradingPairs, tradingPair)) {
-                        return { ...tradingPair, display: false };
-                    } else {
-                        return tradingPair;
-                    }
-                });
-            default:
-                break;
+                default:
+                    break;
+            }
         }
 
         return tradingPairs;
@@ -244,11 +278,6 @@ export class CryptoPlatformService {
     private addLatestPrice(tradingPairPrice: CurrencyTradingPairPrice): Observable<CurrencyTradingPairPrice> {
         if (tradingPairPrice.platform === CryptoPlatform.Bitfinex) {
 
-            /*return of({
-                ...tradingPairPrice,
-                price: 123.45
-            } as CurrencyTradingPairPrice);*/
-
             return this.http.get<BitfinexCurrentPrices>("https://api.bitfinex.com/v1/pubticker/").pipe(
                 map((currentPriceResponse) => ({ ...tradingPairPrice, price: +currentPriceResponse.last_price } as CurrencyTradingPairPrice))
             );
@@ -256,11 +285,6 @@ export class CryptoPlatformService {
             if (!tradingPairPrice.symbol) {
                 tradingPairPrice.symbol = tradingPairPrice.currencyCodeFrom + tradingPairPrice.currencyCodeTo;
             }
-
-            /*return of({
-                ...tradingPairPrice,
-                price: 543.21
-            } as CurrencyTradingPairPrice);*/
 
             return this.http.get<BitstampCurrentPrices>("https://www.bitstamp.net/api/v2/ticker/" + tradingPairPrice.symbol).pipe(
                 map((currentPriceResponse) => ({ ...tradingPairPrice, price: +currentPriceResponse.last } as CurrencyTradingPairPrice))

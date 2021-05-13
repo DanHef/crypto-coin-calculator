@@ -17,11 +17,15 @@ enum ChangeOperation {
 
 const STORAGE_KEY_PORTFOLIO_ITEMS = 'cryptoPortfolioItems';
 
+const STANDARD_TARGET_CURRENCY = 'eur';
+
 @Injectable({
     providedIn: 'root'
 })
 export class CryptoPortfolioService {
     private storage = new SecureStorage();
+
+    constructor() { }
 
     public itemsFromStorage$ = from(this.storage.get({ key: STORAGE_KEY_PORTFOLIO_ITEMS })).pipe(
         map(storedItemString => JSON.parse(storedItemString)),
@@ -49,18 +53,15 @@ export class CryptoPortfolioService {
             return cryptoPortfolioItems;
         }),
         tap((cryptoPortfolioItems) => {
-            console.log("Saving Items: " + JSON.stringify(cryptoPortfolioItems));
+            console.log("Saving Portfolio Items: " + JSON.stringify(cryptoPortfolioItems));
             this.storage.set({
                 key: STORAGE_KEY_PORTFOLIO_ITEMS,
                 value: JSON.stringify({
                     "items": cryptoPortfolioItems
                 })
             });
-        }),
-        tap((items) => console.log("Emitted Items: " + JSON.stringify(items)))
+        })
     )
-
-    constructor() { }
 
     public deleteCryptoPortfolioItem(item: ICryptoPortfolioItem) {
         this.itemCrudSubject.next({

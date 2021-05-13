@@ -1,0 +1,11 @@
+<StackLayout>
+    <Label text="Bitfinex Sum: "></Label><Label [text]="bitfinexSum"></Label>
+    <Label text="Bitstamp Sum: "></Label><Label [text]="bitstampSum"></Label>
+    <Label text="Bitfinex Sum: "></Label><Label [text]="sum"></Label>
+
+    <StackLayout *ngFor="let result of calculationResults$ | async">
+        <Label text="{{result.platform}}"></Label>
+        <Label text="{{result.sourcePortfolioItem.symbol}}"></Label>
+        <Label text="{{result.getResult()}}"></Label>
+    </StackLayout>
+</StackLayout>

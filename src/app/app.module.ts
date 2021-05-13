@@ -9,6 +9,7 @@ import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
 
 import { CryptoPortfolioModule } from "./crypto-portfolio/crypto-portfolio.module";
 import { CryptoPlatformModule } from './crypto-platform/crypto-platform.module';
+import { CryptoCalculationModule } from './crypto-calculation/crypto-calculation.module';
 
 @NgModule({
     bootstrap: [
@@ -19,7 +20,8 @@ import { CryptoPlatformModule } from './crypto-platform/crypto-platform.module';
         NativeScriptUIListViewModule,
         CryptoPortfolioModule,
         CryptoPlatformModule,
-        AppRoutingModule
+        AppRoutingModule,
+        CryptoCalculationModule
     ],
     declarations: [
         AppComponent,

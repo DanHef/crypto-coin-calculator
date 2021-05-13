@@ -41,12 +41,12 @@ export class CreateCryptoPortfolioItemComponent implements OnInit {
   public onItemCreate() {
     this.cryptoPortfolioService.addCryptoPortfolioItem({
       id: 0,
-      platform: this.selectedPlatform,
+      platform: this.selectedPlatform.toLowerCase(),
       description: this.description,
-      name: this.technicalName,
+      name: this.technicalName.toLowerCase(),
       quantity: this.quantity,
       sortOrderNumber: 1,
-      symbol: "BTS"
+      symbol: this.technicalName.toLowerCase()
     } as ICryptoPortfolioItem);
 
     this.router.navigate([ 'crypto-home' ]);
