@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { CryptoPlatformService } from '../crypto-platform.service';
 
 @Component({

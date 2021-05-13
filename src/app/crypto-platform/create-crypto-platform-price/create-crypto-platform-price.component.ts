@@ -21,7 +21,7 @@ export class CreateCryptoPlatformPriceComponent implements OnInit {
 
   public onPlatformPriceCreate() {
     console.log("Create Price Pair: " + this.selectedPlatform + this.symbolFrom + this.symbolTo);
-    this.platformService.addDisplayTradingPair(this.selectedPlatform, this.symbolFrom, this.symbolTo);
+    this.platformService.addDisplayTradingPair(this.selectedPlatform, this.symbolFrom.toLowerCase(), this.symbolTo.toLowerCase());
     this.router.navigate([ 'crypto-home' ]);
   }
 
