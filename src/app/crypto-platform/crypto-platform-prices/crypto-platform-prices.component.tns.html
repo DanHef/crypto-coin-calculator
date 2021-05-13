@@ -1,0 +1,8 @@
+<StackLayout>
+    <StackLayout *ngFor="let btm of tradingPairPrices$ | async as btmArray">
+        <Label text="{{btm.platform}}"></Label>
+        <Label text="{{btm.price}}"></Label>
+        <Label text="{{btm.currencyCodeFrom}}"></Label>
+        <Label text="{{btm.currencyCodeTo}}"></Label>
+    </StackLayout>
+</StackLayout>

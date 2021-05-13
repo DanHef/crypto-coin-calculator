@@ -2,7 +2,7 @@
     <ActionItem ios.position="right" ios.systemIcon="4" (tap)="createPressed()"></ActionItem>
 </ActionBar>
 
-<BottomNavigation selectedIndex="0">
+<BottomNavigation selectedIndex="0"  (selectedIndexChanged)="onSelectedIndexChanged($event)">
     <TabStrip>
         <TabStripItem>
             <Label text="Portfolio"></Label>
@@ -20,11 +20,13 @@
 
     <TabContentItem>
         <GridLayout>
-            <router-outlet></router-outlet>
+            <router-outlet name="cryptoPortfolio"></router-outlet>
         </GridLayout>
     </TabContentItem>
     <TabContentItem>
         <GridLayout>
+            <router-outlet name="crypto-platform"></router-outlet>
+            <!-- <ns-crypto-platform-prices></ns-crypto-platform-prices> -->
         </GridLayout>
     </TabContentItem>
     <TabContentItem>

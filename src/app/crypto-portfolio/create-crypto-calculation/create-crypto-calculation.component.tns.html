@@ -1,0 +1,18 @@
+<StackLayout class="page form p-15">
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formPlatform' | translate }}"></Label>
+    <DropDown #dd [items]="platformList" [hint]="hint" [selectedIndex]="selectedIndexPlatformList" (selectedIndexChanged)="onPlatformChange($event)"
+        style="margin-top: 5px; margin-bottom: 25px"></DropDown>
+
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formSourcePortfolioName' | translate }}"></Label>
+    <DropDown #ddSourcePortfolio [items]="sourcePortfolioNames" [selectedIndex]="selectedIndexSourcePortfolio" hint="Source Portfolio Item"
+        (selectedIndexChanged)="onSourcePortfolioChange($event)" style="margin-top: 5px; margin-bottom: 25px"></DropDown>
+
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formTargetCurrency' | translate }}"></Label>
+    <DropDown #ddSymbols [items]="targetCurrencySymbolList" [selectedIndex]="selectedIndexTargetCurrency" hint="Target Currency Symbol"
+        (selectedIndexChanged)="onTargetCurrencyChange($event)" style="margin-top: 5px; margin-bottom: 25px"></DropDown>
+
+    <Label class="label font-weight-bold m-b-10" text="{{ 'formDescription' | translate }}"></Label>
+    <TextField class="input input-rounded m-b-10" [(ngModel)]="description"></TextField>
+
+    <Button class="btn btn-primary" (tap)="createCalculationResult()" text="{{ 'formButtonCreate' | translate }}"></Button>
+</StackLayout>
