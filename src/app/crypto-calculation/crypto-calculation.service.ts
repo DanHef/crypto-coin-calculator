@@ -11,7 +11,7 @@ import { CryptoPlatform } from '../crypto-platform/crypto-platform.enum';
 })
 export class CryptoCalculationService implements OnInit {
 
-    public calculationResults$ = combineLatest([
+    /*public calculationResults$ = combineLatest([
         this.portfolioService.items$,
         this.platformService.tradingPairPrices$
     ]).pipe(
@@ -26,7 +26,7 @@ export class CryptoCalculationService implements OnInit {
 
             return calculationResults;
         })
-    )
+    )*/
 
     constructor(private readonly portfolioService: CryptoPortfolioService,
                 private readonly platformService: CryptoPlatformService) { }

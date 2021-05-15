@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ICryptoPortfolioItem } from './crypto-portfolio-item/crypto-portfolio-item';
 import { SecureStorage } from '@nativescript/secure-storage';
-import { from, merge, Subject } from 'rxjs';
-import { map, scan, shareReplay, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { share } from 'rxjs/operators';
 
 interface ItemCrudOperation {
     item: ICryptoPortfolioItem;
@@ -27,70 +27,59 @@ export class CryptoPortfolioService {
 
     constructor() { }
 
-    public itemsFromStorage$ = from(this.storage.get({ key: STORAGE_KEY_PORTFOLIO_ITEMS })).pipe(
-        map(storedItemString => JSON.parse(storedItemString)),
-        map(storedItemsJSON => storedItemsJSON && storedItemsJSON.items ? storedItemsJSON.items as ICryptoPortfolioItem[] : []),
-        shareReplay(1),
-        tap((items) => console.log("StoredItems Array: " + JSON.stringify(items)))
+    private itemsFromStorageSubject = new BehaviorSubject<ICryptoPortfolioItem[]>(this.getStoredItems());
+    public items$ = this.itemsFromStorageSubject.asObservable().pipe(
+        share()
     );
 
-    private itemCrudSubject = new Subject<ItemCrudOperation>();
-    public itemCrudAction$ = this.itemCrudSubject.asObservable();
+    public savePortfolioItems(portfolioItems: ICryptoPortfolioItem[]): ICryptoPortfolioItem[] {
+        const numberedItems = [...portfolioItems];
 
-    public items$ = merge(
-        this.itemsFromStorage$,
-        this.itemCrudAction$
-    ).pipe(
-        scan((items: ICryptoPortfolioItem[], crudItem: ItemCrudOperation) => this.handleCRUDOperations(items, crudItem)),
-        shareReplay(1),
-        map(cryptoPortfolioItems => {
-            if (cryptoPortfolioItems) {
-                for (let i = 0; i < cryptoPortfolioItems.length; i++) {
-                    cryptoPortfolioItems[i].id = i + 1;
-                }
-            }
+        for(let i=0; i<numberedItems.length; i++) {
+            numberedItems[i].id = i + 1;
+        }
 
-            return cryptoPortfolioItems;
-        }),
-        tap((cryptoPortfolioItems) => {
-            console.log("Saving Portfolio Items: " + JSON.stringify(cryptoPortfolioItems));
-            this.storage.set({
-                key: STORAGE_KEY_PORTFOLIO_ITEMS,
-                value: JSON.stringify({
-                    "items": cryptoPortfolioItems
-                })
-            });
-        })
-    )
+        const successful = this.storage.setSync({
+            key: STORAGE_KEY_PORTFOLIO_ITEMS,
+            value: JSON.stringify({
+                "items": numberedItems
+            })
+        });
+
+        console.log("Save Successful: " + successful);
+
+        return numberedItems;
+    }
+
+
 
     public deleteCryptoPortfolioItem(item: ICryptoPortfolioItem) {
-        this.itemCrudSubject.next({
-            item,
-            operation: ChangeOperation.Deleted
-        });
+        const items = this.handleCRUDOperations({ item, operation: ChangeOperation.Deleted });
+
+        this.itemsFromStorageSubject.next(items);
     }
 
     public addCryptoPortfolioItem(item: ICryptoPortfolioItem) {
-        this.itemCrudSubject.next({
-            item,
-            operation: ChangeOperation.Added
-        } as ItemCrudOperation);
+        const items = this.handleCRUDOperations({ item, operation: ChangeOperation.Added });
+
+        console.log("New Items: " + JSON.stringify(items));
+        this.itemsFromStorageSubject.next(items);
     }
 
     public changeCryptoPortfolioItem(item: ICryptoPortfolioItem) {
-        this.itemCrudSubject.next({
-            item,
-            operation: ChangeOperation.Changed
-        });
+        const items = this.handleCRUDOperations({ item, operation: ChangeOperation.Changed });
+
+        this.itemsFromStorageSubject.next(items);
     }
 
-    private handleCRUDOperations(items: ICryptoPortfolioItem[], crudItem: ItemCrudOperation) {
+    private handleCRUDOperations(crudItem: ItemCrudOperation) {
+        let items = this.getStoredItems();
         if (crudItem.operation === ChangeOperation.Deleted) {
-            return items.filter((checkItem) => checkItem.id !== crudItem.item.id);
+            items =  items.filter((checkItem) => checkItem.id !== crudItem.item.id);
         } else if (crudItem.operation === ChangeOperation.Added) {
-            return [...items, crudItem.item];
+            items = [...items, crudItem.item];
         } else if (crudItem.operation === ChangeOperation.Changed) {
-            return items.map((item) => {
+            items = items.map((item) => {
                 if (item.id === crudItem.item.id) {
                     return crudItem.item;
                 } else {
@@ -98,5 +87,19 @@ export class CryptoPortfolioService {
                 }
             });
         }
+
+        items = this.savePortfolioItems(items);
+
+        return items;
+    }
+
+    private getStoredItems() {
+        let storedItems: ICryptoPortfolioItem[] = [];
+        const storedItemsString = this.storage.getSync({ key: STORAGE_KEY_PORTFOLIO_ITEMS });
+        if (storedItemsString) {
+            storedItems = JSON.parse(storedItemsString).items as ICryptoPortfolioItem[];
+        }
+
+        return storedItems;
     }
 }

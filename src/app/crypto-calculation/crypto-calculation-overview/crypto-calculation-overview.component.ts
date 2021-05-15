@@ -13,7 +13,7 @@ export class CryptoCalculationOverviewComponent implements OnInit {
     public bitfinexSum = 0;
     public sum = 0;
 
-    calculationResults$ = this.calculationService.calculationResults$.pipe(
+    calculationResults$ = [];/* this.calculationService.calculationResults$.pipe(
         tap((calculationResults) => {
             for(let calculationResult of calculationResults) {
                 const result = calculationResult.getResult();
@@ -26,7 +26,7 @@ export class CryptoCalculationOverviewComponent implements OnInit {
                 this.sum = this.sum + result;
             }
         })
-    );
+    );*/
 
     constructor(private readonly calculationService: CryptoCalculationService) { }
 

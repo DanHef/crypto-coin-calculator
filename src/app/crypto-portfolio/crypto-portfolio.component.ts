@@ -11,7 +11,7 @@ import { tap } from 'rxjs/operators';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CryptoPortfolioComponent {
-    cryptoPortfolioItems$ = this.cryptoPortfolioService.items$;
+    cryptoPortfolioItems$ = this.cryptoPortfolioService.items$.pipe(tap(()=>console.log("Component Triggered")));
 
     constructor(private readonly cryptoPortfolioService: CryptoPortfolioService) { }
 
