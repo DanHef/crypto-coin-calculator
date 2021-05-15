@@ -3,11 +3,11 @@
     <PickerField hint="Click here" [items]="platforms" (selectedValueChange)="onPlatformSelectionChanged($event)">
     </PickerField>
 
-    <Label class="label" text="Technical Name"></Label>
-    <TextField class="input m-b-10" [(ngModel)]="technicalName"></TextField>
+    <Label class="label" text="Portfolio Item Name"></Label>
+    <TextField class="input m-b-10" [(ngModel)]="name"></TextField>
 
-    <Label class="label" text="Description"></Label>
-    <TextField class="input m-b-10" [(ngModel)]="description"></TextField>
+    <Label class="label" text="Currency Code in Platform"></Label>
+    <TextField class="input m-b-10" [(ngModel)]="currencyCode"></TextField>
 
     <Label class="label" text="Quantity"></Label>
     <TextField class="input m-b-10" [(ngModel)]="quantity"></TextField>

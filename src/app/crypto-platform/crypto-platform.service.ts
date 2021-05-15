@@ -156,9 +156,9 @@ export class CryptoPlatformService {
             for (let portfolioItem of portfolioItems) {
                 const tradingPairFromPortfolioItem = {
                     platform: portfolioItem.platform,
-                    currencyCodeFrom: portfolioItem.symbol,
+                    currencyCodeFrom: portfolioItem.currencyCode,
                     currencyCodeTo: 'eur',
-                    description: portfolioItem.description + ' to EUR',
+                    description: portfolioItem.name + ' to EUR',
                 } as CurrencyTradingPairPrice;
 
                 if (this.checkTradingPairExists(tradingPairs, tradingPairFromPortfolioItem)) {

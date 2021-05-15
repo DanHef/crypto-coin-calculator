@@ -10,6 +10,7 @@ import { NativeScriptUIListViewModule } from "nativescript-ui-listview/angular";
 import { CryptoPortfolioModule } from "./crypto-portfolio/crypto-portfolio.module";
 import { CryptoPlatformModule } from './crypto-platform/crypto-platform.module';
 import { CryptoCalculationModule } from './crypto-calculation/crypto-calculation.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
     bootstrap: [
@@ -21,7 +22,8 @@ import { CryptoCalculationModule } from './crypto-calculation/crypto-calculation
         CryptoPortfolioModule,
         CryptoPlatformModule,
         AppRoutingModule,
-        CryptoCalculationModule
+        CryptoCalculationModule,
+        SharedModule
     ],
     declarations: [
         AppComponent,

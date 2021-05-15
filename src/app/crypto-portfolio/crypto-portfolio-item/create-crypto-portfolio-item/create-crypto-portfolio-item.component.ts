@@ -1,67 +1,62 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ListPicker } from '@nativescript/core';
+import { Router } from '@angular/router';
+import { CryptoPlatform } from 'src/app/crypto-platform/crypto-platform.enum';
 import { CryptoPortfolioService } from '../../crypto-portfolio.service';
-import { ICryptoPortfolioItem } from '../crypto-portfolio-item';
+import { CryptoPortfolioItem } from '../crypto-portfolio-item';
 
 @Component({
-  selector: 'ns-create-crypto-portfolio-item',
-  templateUrl: './create-crypto-portfolio-item.component.html',
-  styleUrls: ['./create-crypto-portfolio-item.component.css']
+    selector: 'ns-create-crypto-portfolio-item',
+    templateUrl: './create-crypto-portfolio-item.component.html',
+    styleUrls: ['./create-crypto-portfolio-item.component.css']
 })
 export class CreateCryptoPortfolioItemComponent implements OnInit {
-  platforms: Array<string> = ["Bitstamp", "Bitfinex"];
-  selectedPlatform = "";
-  technicalName = "";
-  description = "";
-  quantity = 0;
+    platforms: Array<string> = ["Bitstamp", "Bitfinex"];
+    selectedPlatform = "";
+    name = "";
+    currencyCode = "";
+    quantity = 1;
 
-  showPlatformPicker = false;
+    showPlatformPicker = false;
 
-  constructor(private readonly cryptoPortfolioService: CryptoPortfolioService,
-              private readonly router: Router,
-              private readonly activatedRoute: ActivatedRoute) { }
+    constructor(private readonly cryptoPortfolioService: CryptoPortfolioService,
+        private readonly router: Router) { }
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {
+    }
 
-  public onPlatformSelectionChanged(event) {
-    this.selectedPlatform = event.value;
+    public onPlatformSelectionChanged(event) {
+        this.selectedPlatform = event.value;
 
-  }
+    }
 
-  public onPlatformSelect() {
-    this.showPlatformPicker = true;
-  }
+    public onPlatformSelect() {
+        this.showPlatformPicker = true;
+    }
 
-  public confirmSelectedPlatform() {
-    this.showPlatformPicker = false;
-  }
+    public confirmSelectedPlatform() {
+        this.showPlatformPicker = false;
+    }
 
-  public onItemCreate() {
-    this.cryptoPortfolioService.addCryptoPortfolioItem({
-      id: 0,
-      platform: this.selectedPlatform.toLowerCase(),
-      description: this.description,
-      name: this.technicalName.toLowerCase(),
-      quantity: this.quantity,
-      sortOrderNumber: 1,
-      symbol: this.technicalName.toLowerCase()
-    } as ICryptoPortfolioItem);
+    public onItemCreate() {
+        const newPortfolioItem = new CryptoPortfolioItem(this.name.toLowerCase(),
+                                                            this.quantity,
+                                                            this.selectedPlatform.toLowerCase() as CryptoPlatform,
+                                                            this.currencyCode.toLowerCase());
+        this.cryptoPortfolioService.addCryptoPortfolioItem(newPortfolioItem);
 
-    this.router.navigate([ 'crypto-home' ]);
-  }
+        this.router.navigate(['crypto-home']);
+    }
 
-  public onCancel() {
-    this.initializeFields();
-    this.router.navigate([ 'crypto-home' ]);
-  }
+    public onCancel() {
+        this.initializeFields();
+        this.router.navigate(['crypto-home']);
+    }
 
-  private initializeFields() {
-    this.selectedPlatform = "";
-    this.description = "";
-    this.technicalName = "";
-    this.quantity = 0;
-  }
+    private initializeFields() {
+        this.selectedPlatform = "";
+        this.currencyCode = "";
+        this.name = "";
+        this.quantity = 0;
+    }
 
 }
